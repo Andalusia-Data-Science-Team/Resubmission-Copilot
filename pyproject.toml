@@ -21,6 +21,8 @@ keywords = ["machine learning", "python", "AI", "data science", "LLM"]
 requires-python = ">=3.10"
 
 dependencies = [
+    "pandas==2.3.0",
+    "openpyxl==3.1.5",
     "langchain==0.2.8",
     "langchain-community==0.2.5",
     "langchain-fireworks==0.1.7",

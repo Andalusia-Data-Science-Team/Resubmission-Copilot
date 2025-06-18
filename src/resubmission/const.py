@@ -1,0 +1,8 @@
+CODE = "Service Code"
+SFDA_CODE = "RegisterNumber"
+SFDA_NAME = "TradeName"
+MN11 = "Not clinically justified"
+REASON = "Reason"
+NORMALIZED = "Normalized_Reason"
+JUSTIFICATION = "Justification"
+SERVICE = "Service"

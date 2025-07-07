@@ -1,4 +1,5 @@
 import re
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_fireworks import ChatFireworks
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -58,3 +59,24 @@ def processing_thoughts(text):
     text_in_between = re.findall(pattern, str(text), re.DOTALL)
     clean_text = re.sub(pattern, "", text, flags=re.DOTALL)
     return clean_text.strip(), text_in_between[0].strip()
+
+
+def extract_discharge_summary(html):
+    soup = BeautifulSoup(html, 'lxml')
+    discharge_summary = []
+
+    # Only extract from top-level, non-nested tags (e.g., h1, h2, h3, and .form-section blocks)
+    for tag in soup.select('h1, h2, h3, div.form-section'):
+        # Avoid re-processing nested divs
+        if tag.name == 'div' and tag.find_parent('div', class_='form-section'):
+            continue  # skip nested form-section divs
+
+        text = tag.get_text(" ", strip=True)
+        if text:
+            discharge_summary.append(text)
+
+    # Combine into a single string
+    discharge_summary = "\n".join(discharge_summary)
+    discharge_summary = re.sub(r'[\u0600-\u06FF]+', '', discharge_summary)
+
+    return discharge_summary

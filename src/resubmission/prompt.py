@@ -7,6 +7,7 @@ Think about the ordered service and its purpose. Given the patient's diagnosis a
 justify and highlight the necessity for the requested service (for treatment or necessary pain relief, or to rule out possible risk factors, etc..),
 and convince the insurance company with the absolute need for this service, emphasize its importance in solid medical terms.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
@@ -29,6 +30,7 @@ justify and highlight the necessity for the requested service that distinguishes
 or to rule out possible risk factors, etc..), and convince the insurance company with the absolute need for this service apart from the other one,
 emphasize its importance in solid medical terms.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
@@ -50,6 +52,7 @@ Think about the ordered service and its purpose, and using your medical knowledg
 (for treatment or necessary pain relief, or to rule out possible risk factors, etc..), and convince the insurance company with the absolute
 need for this service despite the diagnosis being uncovered, emphasize its importance in solid medical terms.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
@@ -71,6 +74,7 @@ Think about the ordered service and its purpose, and using your medical knowledg
 (for treatment or necessary pain relief, or to rule out possible risk factors, etc..), and convince the insurance company with the absolute
 need for this service and it's validity despite the patient's age, emphasize its importance in solid medical terms.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
@@ -93,6 +97,7 @@ Think about the ordered service and its purpose, and using your medical knowledg
 need for this service and it's validity despite the possibility of interaction with the other drug, emphasize its importance in solid medical terms.
 Implicitly, make it clear that it was taken into consideration, patient's health is a priority, and there is no harm doing this service.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
@@ -115,6 +120,7 @@ Think about the ordered service and its purpose, and using your medical knowledg
 (for treatment or necessary pain relief, or to rule out possible risk factors, etc..), and convince the insurance company with the absolute
 need for this service and it's validity despite the possibility of interaction with the other drug, emphasize its importance in solid medical terms.
 Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
+Do not add a conclusion at the end. Keep it in a medium length like the provided example.
 
 You are supposed to write your justification to look like the following format:
 

@@ -4,13 +4,19 @@ from dotenv import load_dotenv
 from langchain_fireworks import ChatFireworks
 from langchain_core.messages import HumanMessage, SystemMessage
 from resubmission.const import MN11
+from resubmission.models import Policy, CoverageDetail
+from resubmission.prompt import chatbot_prompt
 import urllib.request
 import urllib.parse
 import urllib.error
 from sqlalchemy import create_engine
 import time
-from main import logger
-from Typing import Dict
+from typing import Dict
+from pathlib import Path
+import json
+from datetime import datetime
+
+
 _ = load_dotenv()
 
 normalized = {
@@ -25,40 +31,62 @@ normalized = {
     r"contradiction\s*": "Severe Interactions",
     r"not found.*code": "No drug found for this code",
     r"wrong.*code": "No drug found for this code",
-    r"not covered": "Not Covered"
+    r"not covered": "Not Covered",
 }
-
-
-def normalize_text(text):
-    for pattern, category in normalized.items():
-        if re.search(pattern, text.lower()):
-            return category
 
 
 def extract_drug_code(text):
     """
     Extract the drug codes in rejection reason strings.
     """
-    pattern = r'\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){0,2}'
+    pattern = r"\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){0,2}"
     codes = re.findall(pattern, text)
     return set(codes)
 
 
-def llm_response(info, reason, meds, prompt, model="accounts/fireworks/models/qwen3-235b-a22b"):
-    chat_model = ChatFireworks(
-        model=model, temperature=0.2, max_tokens=11000, model_kwargs={"top_k": 1}
-    )
-
+def llm_response(
+    policy, visit_info, question, model="accounts/fireworks/models/gpt-oss-120b"
+):
+    chat_model = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
     chat_history = [
-        SystemMessage(content=prompt),
-        HumanMessage(content=info),
-        HumanMessage(content="Rejection Reason Provided by Insurance Company: " + reason),
+        SystemMessage(content=chatbot_prompt),
+        HumanMessage(content=policy),
+        SystemMessage(
+            content="""For your context, these are the services that were provided to the patient during their visit to the hospital.
+        You should reference to them if you're asked about it directly.
+        """
+        ),
+        HumanMessage(content=visit_info),
+        HumanMessage(content=question),
     ]
-    if meds:
-        chat_history.append(HumanMessage(content=str(meds)))
-
     response = chat_model.invoke(chat_history).content
     return response
+
+
+def data_prep(df):
+    patient_info = str(
+        df[
+            [
+                "Gender",
+                "Age",
+                "Diagnosis",
+                "ICD10",
+                "ProblemNote",
+                "Chief_Complaint",
+                "Symptoms",
+            ]
+        ]
+        .iloc[0]
+        .dropna()
+        .to_dict()
+    )
+    services = str(
+        df[["Service_id", "Service_Name", "Note", "Reason"]]
+        .dropna(axis=1)
+        .set_index("Service_id")
+        .to_dict(orient="records")
+    )
+    return patient_info, services
 
 
 def processing_thoughts(text):
@@ -95,17 +123,16 @@ def get_conn_engine(passcodes):
             f"Connection Timeout=300;"
         )
         engine = create_engine("mssql+pyodbc:///?odbc_connect={}".format(params))
-        logger.debug(f"Database connection engine created for {server}/{db}")
         return engine
     except KeyError as e:
-        logger.error(f"Missing key in passcodes dictionary: {e}")
+        print(f"Missing key in passcodes dictionary: {e}")
         raise
     except Exception as e:
-        logger.exception(f"Error creating database connection engine: {e}")
+        print(f"Error creating database connection engine: {e}")
         raise
 
 
-def read_data(query, read_passcode):
+def read_data(query, passcode, params):
     """
     Executes a SQL query using get_conn_engine. If the first attempt fails,
     waits for 5 minutes before trying again. If second attempt fails, reads data from live instead.
@@ -114,17 +141,23 @@ def read_data(query, read_passcode):
         pandas DataFrame with query results
     """
     try:
-        df = pd.read_sql_query(query, get_conn_engine(read_passcode))
+        df = pd.read_sql_query(query, get_conn_engine(passcode), params=params)
         return df
     except Exception as e:
-        logger.debug(f"First attempt failed with error: {str(e)}")
-        logger.debug("Waiting 5 minutes before retrying...")
+        print(e)
         time.sleep(300)  # Wait for 5 minutes (300 seconds)
-        df = pd.read_sql_query(query, get_conn_engine(read_passcode))
+        df = pd.read_sql_query(query, get_conn_engine(passcode), params=params)
         return df
 
 
-def update_table(passcode: Dict[str, str], table_name: str, df: pd.DataFrame, retries=28, delay=500):
+def update_table(
+    passcode: Dict[str, str],
+    table_name: str,
+    df: pd.DataFrame,
+    logger,
+    retries=28,
+    delay=500,
+):
     """
     Updates a database table with the given DataFrame. Retries on failure.
 
@@ -135,7 +168,7 @@ def update_table(passcode: Dict[str, str], table_name: str, df: pd.DataFrame, re
     - delay: Delay in seconds between retries.
     """
     try:
-        engine = get_conn_engine(passcode)
+        engine = get_conn_engine(passcode, logger)
         # Create a copy of the DataFrame to avoid modifying the original
         df_clean = df.copy()
 
@@ -167,3 +200,92 @@ def update_table(passcode: Dict[str, str], table_name: str, df: pd.DataFrame, re
     except Exception as e:
         logger.exception(f"Critical error in updating table {table_name}: {e}")
         raise
+
+
+def list_files(folder_path: str):
+    """
+    Return a list of file names in the given folder.
+    """
+    p = Path(folder_path)
+    if not p.is_dir():
+        raise ValueError(f"{folder_path} is not a valid directory")
+
+    return [str(f) for f in p.iterdir() if f.is_file()]
+
+
+def insert(data_source):
+    """
+    Insert a Policy document from either a JSON file path or a Python dict.
+    Validates and doesn't insert if a policy with the same policy_number already exists.
+    """
+    # --- Load data ---
+    if isinstance(data_source, str):
+        with open(data_source, "r") as f:
+            data = json.load(f)
+    elif isinstance(data_source, dict):
+        data = data_source
+    else:
+        raise TypeError("data_source must be a dict or JSON file path")
+
+    policy_number = data.get("policy_number")
+    if not policy_number:
+        raise ValueError("Missing required field: 'policy_number'")
+
+    # --- Check for existing policy ---
+    existing = Policy.objects(policy_number=policy_number).first()
+    if existing:
+        print(f"Policy {policy_number} already exists. Skipping insert.")
+        return existing  # return the existing one instead of re-inserting
+
+    # --- Parse coverage details ---
+    coverage_list = [
+        CoverageDetail(**coverage) for coverage in data.get("coverage_details", [])
+    ]
+
+    # --- Create Policy object ---
+    policy = Policy(
+        policy_number=policy_number,
+        company_name=data.get("company_name"),
+        policy_holder=data.get("policy_holder"),
+        effective_from=(
+            datetime.fromisoformat(data["effective_from"])
+            if "effective_from" in data
+            else None
+        ),
+        effective_to=(
+            datetime.fromisoformat(data["effective_to"])
+            if "effective_to" in data
+            else None
+        ),
+        coverage_details=coverage_list,
+    )
+
+    policy.save()
+    print(f"Policy {policy.policy_number} inserted successfully.")
+
+
+def delete(policy_number: str):
+    """
+    Delete a Policy document from MongoDB by its policy_number.
+
+    Args:
+        policy_number (str): The policy number of the document to delete.
+
+    Returns:
+        bool: True if a document was deleted, False otherwise.
+    """
+    policy = Policy.objects(policy_number=policy_number).first()
+
+    if not policy:
+        print(f"Policy {policy_number} not found.")
+        return False
+
+    policy.delete()
+    print(f"Policy {policy_number} deleted successfully.")
+    return True
+
+
+def normalize_text(text: str) -> str:
+    if not isinstance(text, str):
+        return text  # handle non-string values safely
+    return text.replace(" ", "").replace("–", "").replace("-", "").lower()

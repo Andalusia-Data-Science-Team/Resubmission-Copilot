@@ -1,0 +1,11 @@
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+header {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+}
+
+.card {
+  border-radius: 15px;
+}

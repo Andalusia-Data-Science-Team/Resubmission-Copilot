@@ -28,6 +28,10 @@ dependencies = [
     "langchain-fireworks==0.1.7",
     "psycopg2-binary==2.9.10",
     "python-dotenv==1.0.1",
+    "llama-cloud-services==0.6.65",
+    "mongoengine==0.29.1",
+    "Flask==3.1.2",
+    "pyodbc==5.3.0",
 ]
 
 [project.optional-dependencies]

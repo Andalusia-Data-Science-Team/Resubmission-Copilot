@@ -1,0 +1,271 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- Visit Data Table -->
+{% if df %}
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">📊 Visit Details</h5>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="text-center">Start Date</th>
+            <th class="text-center">Department</th>
+            <th class="text-center">Specialty</th>
+            <th class="text-center">Contract</th>
+            <th class="text-center">Service Name</th>
+            <th class="text-center">Response Reason</th>
+            <th class="text-center">Response Code</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Diagnosis</th>
+            <th class="text-center">ICD10 Code</th>
+            <th class="text-center">SFDA Status</th>
+            <th class="text-center">SFDA Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in df %}
+          <tr>
+            <td class="text-center">{{ row.Start_Date }}</td>
+            <td class="text-center">{{ row.Med_Dept }}</td>
+            <td class="text-center">{{ row.Specialty_Name }}</td>
+            <td class="text-center">{{ row.Contract }}</td>
+            <td class="text-center">{{ row.Service_Name }}</td>
+            <td class="text-center">{{ row.ResponseReason }}</td>
+            <td class="text-center"><code>{{ row.ResponseReasonCode }}</code></td>
+            <td class="text-center"><strong>{{ row.Price }}</strong></td>
+            <td class="text-center">{{ row.Diagnose_Name }}</td>
+            <td class="text-center"><code>{{ row['ICD10 Code'] }}</code></td>
+            <td class="text-center">{{ row.SFDAStatus }}</td>
+            <td class="text-center"><code>{{ row.SFDACode }}</code></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Chat Interface -->
+<div class="card shadow-sm">
+  <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">💬 Resubmission AI Assistant</h5>
+    <button class="btn btn-sm btn-light" onclick="clearChat()">Clear Chat</button>
+  </div>
+  
+  <div class="card-body p-0">
+    <div id="chat-box" class="p-3 bg-light" style="height: 500px; overflow-y: auto;">
+      <div class="text-center text-muted py-5">
+        <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+        <p class="mt-2">Start chatting with the assistant...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card-footer bg-white">
+    <form id="chat-form">
+      <div class="input-group">
+        <input type="text" id="message" name="message" class="form-control form-control-lg" 
+               placeholder="Ask about coverage limits, pre-approval, or policy details..." autocomplete="off">
+        <button class="btn btn-success btn-lg px-4" type="submit">
+          <span id="send-icon">Send</span>
+          <span id="loading-icon" class="d-none">
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            Sending...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+#chat-box {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.message-user {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 18px 18px 4px 18px;
+  margin-bottom: 12px;
+  max-width: 75%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.message-assistant {
+  background: white;
+  color: #333;
+  padding: 12px 16px;
+  border-radius: 18px 18px 18px 4px;
+  margin-bottom: 12px;
+  max-width: 75%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.message-container-user {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.message-container-assistant {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 18px;
+  max-width: 80px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background-color: #90949c;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 2px;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+</style>
+
+<script>
+const form = document.getElementById('chat-form');
+const box = document.getElementById('chat-box');
+const messageInput = document.getElementById('message');
+const sendIcon = document.getElementById('send-icon');
+const loadingIcon = document.getElementById('loading-icon');
+
+// Clear initial placeholder
+let isFirstMessage = true;
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = messageInput.value.trim();
+  if (!msg) return;
+
+  // Clear placeholder on first message
+  if (isFirstMessage) {
+    box.innerHTML = '';
+    isFirstMessage = false;
+  }
+
+  // Add user message
+  const userMsgContainer = document.createElement('div');
+  userMsgContainer.className = 'message-container-user';
+  userMsgContainer.innerHTML = `<div class="message-user">${escapeHtml(msg)}</div>`;
+  box.appendChild(userMsgContainer);
+  
+  messageInput.value = '';
+  messageInput.disabled = true;
+  box.scrollTop = box.scrollHeight;
+
+  // Show loading state
+  sendIcon.classList.add('d-none');
+  loadingIcon.classList.remove('d-none');
+
+  // Add typing indicator
+  const typingContainer = document.createElement('div');
+  typingContainer.className = 'message-container-assistant';
+  typingContainer.id = 'typing-indicator-container';
+  typingContainer.innerHTML = `
+    <div class="typing-indicator">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `;
+  box.appendChild(typingContainer);
+  box.scrollTop = box.scrollHeight;
+
+  try {
+    const response = await fetch('', {
+      method: 'POST',
+      body: new URLSearchParams({message: msg}),
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    });
+    const data = await response.json();
+
+    // Remove typing indicator
+    document.getElementById('typing-indicator-container').remove();
+
+    // Add assistant response
+    const assistantMsgContainer = document.createElement('div');
+    assistantMsgContainer.className = 'message-container-assistant';
+    assistantMsgContainer.innerHTML = `<div class="message-assistant">${escapeHtml(data.response)}</div>`;
+    box.appendChild(assistantMsgContainer);
+    
+  } catch (error) {
+    document.getElementById('typing-indicator-container').remove();
+    const errorMsgContainer = document.createElement('div');
+    errorMsgContainer.className = 'message-container-assistant';
+    errorMsgContainer.innerHTML = `<div class="message-assistant text-danger">Error: Could not get response. Please try again.</div>`;
+    box.appendChild(errorMsgContainer);
+  } finally {
+    messageInput.disabled = false;
+    messageInput.focus();
+    sendIcon.classList.remove('d-none');
+    loadingIcon.classList.add('d-none');
+    box.scrollTop = box.scrollHeight;
+  }
+});
+
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function clearChat() {
+  box.innerHTML = `
+    <div class="text-center text-muted py-5">
+      <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+      <p class="mt-2">Start chatting with the assistant...</p>
+    </div>
+  `;
+  isFirstMessage = true;
+}
+</script>
+{% endblock %}

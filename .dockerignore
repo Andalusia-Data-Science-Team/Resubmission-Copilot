@@ -1,0 +1,46 @@
+# Byte-compiled / cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Local development files
+*.log
+*.env
+*.ini
+*.cfg
+*.toml
+
+# Version control
+.git
+.gitignore
+.idea/
+.vscode/
+
+# OS and editor junk
+.DS_Store
+Thumbs.db
+
+# Tests, notebooks, docs
+tests/
+Notebooks/
+docs/
+Policy/
+scripts/
+
+# Data or samples not needed in prod
+Data/*.xlsx
+*.ipynb
+
+# Docker artifacts
+Dockerfile
+docker-compose.yml
+
+passcode.json
+schema.json
+database.ini

@@ -6,7 +6,7 @@ from mongoengine import (
     DateField,
     EmbeddedDocumentListField,
 )
-from resubmission.config_handler import config
+from src.resubmission.config_handler import config
 
 # 1. Connect to MongoDB
 params = config(section="mongodb")

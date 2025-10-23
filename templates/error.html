@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- Error Card -->
+<div class="card shadow-sm border-0">
+  <div class="card-body text-center p-5">
+    <div class="error-icon-large mb-4">
+      <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 5rem;"></i>
+    </div>
+    
+    <h2 class="text-danger mb-3">Oops! Something went wrong</h2>
+    
+    <div class="alert alert-danger d-inline-block text-start" role="alert">
+      <strong>Error:</strong> {{ message }}
+    </div>
+    
+    {% if available_levels %}
+    <div class="alert alert-info mt-3" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      <strong>Available VIP Levels:</strong>
+      <div class="mt-2">
+        {% for level in available_levels %}
+          <span class="badge bg-primary me-2 mb-2">{{ level }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <div class="mt-4">
+      <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg px-5">
+        <i class="bi bi-arrow-left-circle me-2"></i>
+        Back to Search
+      </a>
+    </div>
+    
+    <div class="mt-4 text-muted">
+      <small>
+        <i class="bi bi-lightbulb me-1"></i>
+        Try checking your Visit ID or contact support if the issue persists.
+      </small>
+    </div>
+  </div>
+</div>
+
+<style>
+.error-icon-large {
+  animation: shake 0.5s;
+  animation-iteration-count: 1;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+  20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.alert {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  border-radius: 15px;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+}
+</style>
+
+{% endblock %}

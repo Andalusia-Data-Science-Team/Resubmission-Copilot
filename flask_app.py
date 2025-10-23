@@ -25,9 +25,10 @@ def get_visit_data(visit_id):
     df = read_data(query, read_passcode, params=(visit_id,))
     df["Contract"] = (
         df["Contract"]
+        .fillna("")  # ensure no NaN
         .astype(str)
         .str.split("-", n=1)
-        .pipe(lambda p: p.str[1].str.strip().fillna(p.str[0].str.strip()))
+        .pipe(lambda p: p.apply(lambda x: x[1].strip() if len(x) > 1 else x[0].strip()))
     )
     df = pd.merge(df, sf, on="Service_Name", how="left")
 

@@ -3,9 +3,9 @@ import pandas as pd
 from dotenv import load_dotenv
 from langchain_fireworks import ChatFireworks
 from langchain_core.messages import HumanMessage, SystemMessage
-from resubmission.const import MN11
-from resubmission.models import Policy, CoverageDetail
-from resubmission.prompt import chatbot_prompt
+from src.resubmission.const import MN11
+from src.resubmission.models import Policy, CoverageDetail
+from src.resubmission.prompt import chatbot_prompt
 import urllib.request
 import urllib.parse
 import urllib.error

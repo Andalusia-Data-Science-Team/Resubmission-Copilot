@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 import pandas as pd
+from resubmission.const import INDEX
 from resubmission.models import Policy
-from resubmission.utils import get_visits_by_date, get_visit_data, get_policy_details, llm_response
+from resubmission.utils import (
+    get_visits_by_date,
+    get_visit_data,
+    get_policy_details,
+    llm_response,
+)
 import json
 
 app = Flask(__name__)
@@ -29,14 +35,14 @@ def home():
                 visit_ids = visit_ids.tolist()
 
                 # Store in session for persistence
-                session['last_search'] = {
-                    'start_date': start_date,
-                    'end_date': end_date,
-                    'visit_ids': visit_ids
+                session["last_search"] = {
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "visit_ids": visit_ids,
                 }
             else:
                 return render_template(
-                    "index.html",
+                    INDEX,
                     error_message=f"No Bupa visits were found between {start_date} and {end_date}. Please try different dates.",
                     error_type="warning",
                 )
@@ -46,11 +52,11 @@ def home():
             return redirect(url_for("display_policy_details", visit_id=visit_id))
 
     return render_template(
-        "index.html",
+        INDEX,
         visit_ids=visit_ids,
         show_dropdown=show_dropdown,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
     )
 
 
@@ -58,7 +64,9 @@ def home():
 def display_policy_details(visit_id):
     df = get_visit_data(visit_id)
     if df is None:
-        return render_template("error.html", message="No BE or CV Rejections Were Found for This Visit")
+        return render_template(
+            "error.html", message="No BE or CV Rejections Were Found for This Visit"
+        )
 
     policy, detail, available_levels = get_policy_details(df)
     if detail is None:
@@ -76,15 +84,15 @@ def display_policy_details(visit_id):
     }
 
     # Retrieve last search data from session
-    last_search = session.get('last_search', {})
-    visit_ids = last_search.get('visit_ids', [])
-    start_date = last_search.get('start_date')
-    end_date = last_search.get('end_date')
+    last_search = session.get("last_search", {})
+    visit_ids = last_search.get("visit_ids", [])
+    start_date = last_search.get("start_date")
+    end_date = last_search.get("end_date")
     show_dropdown = bool(visit_ids)
 
     # display policy details
     return render_template(
-        "index.html",
+        INDEX,
         selected_visit=visit_id,
         df=df.to_dict(orient="records"),
         policy=policy,
@@ -92,7 +100,7 @@ def display_policy_details(visit_id):
         visit_ids=visit_ids,
         show_dropdown=show_dropdown,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
     )
 
 

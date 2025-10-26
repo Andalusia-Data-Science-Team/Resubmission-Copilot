@@ -3,7 +3,6 @@ import pandas as pd
 from dotenv import load_dotenv
 from langchain_fireworks import ChatFireworks
 from langchain_core.messages import HumanMessage, SystemMessage
-from src.resubmission.const import MN11
 from src.resubmission.models import Policy, CoverageDetail
 from src.resubmission.prompt import chatbot_prompt
 import urllib.request
@@ -16,23 +15,76 @@ from pathlib import Path
 import json
 from datetime import datetime
 
+sf = pd.read_csv("Data/sfda_list.csv").rename(columns={"NameEn": "Service_Name"})
+
+with open("passcode.json", "r") as file:
+    db_configs = json.load(file)
+db_configs = db_configs["DB_NAMES"]
+read_passcode = db_configs["Replica"]
+
+sql_path = Path("SQL")
+with open(sql_path / "resubmission.sql", "r") as file:
+    query = file.read()
+with open(sql_path / "get_visits.sql", "r") as file:
+    visits_query = file.read()
 
 _ = load_dotenv()
 
-normalized = {
-    r"not.*indicated": MN11,
-    r"not.*justified": MN11,
-    r"no.*necessity": MN11,
-    r"inconsistent.*diagnosis|diagnosis.*inconsistent": MN11,
-    r"not related.*diagnosis|diagnosis.*not related": MN11,
-    r"therapeutic duplication": "Therapeutic Duplication",
-    r"\bage\b": "Inconsistent with age",
-    r"interactions": "Severe Interactions",
-    r"contradiction\s*": "Severe Interactions",
-    r"not found.*code": "No drug found for this code",
-    r"wrong.*code": "No drug found for this code",
-    r"not covered": "Not Covered",
-}
+
+def get_visits_by_date(start_date, end_date):
+    df = read_data(visits_query, read_passcode, params=(start_date, end_date))
+    return df['VisitID']
+
+
+def get_policy_details(df):
+    # try to match policy number +1 and without 1, to make up for wrong policy number setup in dotcare database
+    policy = Policy.objects(
+        policy_number=df["ContractorClientPolicyNumber"].iloc[0]
+    ).first()
+    if not policy:
+        policy = Policy.objects(
+            policy_number=df["ContractorClientPolicyNumber2"].iloc[0]
+        ).first()
+
+    # matching the contract from dotcare db with contracts in policy
+    vip_level = normalize_text(df["Contract"].iloc[0])
+    selected = [
+        c for c in policy.coverage_details if normalize_text(c.vip_level) == vip_level
+    ]
+
+    available_levels = None
+    detail = None
+    if not selected:  # if no match was found in contracts
+        available_levels = [c.vip_level for c in policy.coverage_details]
+        # returns available_levels to include in the error msg
+    else:
+        detail = selected[0].to_mongo().to_dict()
+        detail = dict(sorted(detail.items()))
+    return policy, detail, available_levels
+
+
+def get_visit_data(visit_id):
+    """Fetch and process visit data by selected visit id"""
+    df = read_data(query, read_passcode, params=(visit_id,))
+    df["Contract"] = (
+        df["Contract"]
+        .fillna("")  # ensure no NaN
+        .astype(str)
+        .str.split("-", n=1)
+        .pipe(lambda p: p.apply(lambda x: x[1].strip() if len(x) > 1 else x[0].strip()))
+    )
+    df = pd.merge(df, sf, on="Service_Name", how="left")
+
+    # Format Start_Date consistently
+    if "Start_Date" in df.columns and not df.empty:
+        df["Start_Date"] = pd.to_datetime(df["Start_Date"]).dt.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+    if df.empty:
+        return None
+    else:
+        return df
 
 
 def extract_drug_code(text):
@@ -61,32 +113,6 @@ def llm_response(
     ]
     response = chat_model.invoke(chat_history).content
     return response
-
-
-def data_prep(df):
-    patient_info = str(
-        df[
-            [
-                "Gender",
-                "Age",
-                "Diagnosis",
-                "ICD10",
-                "ProblemNote",
-                "Chief_Complaint",
-                "Symptoms",
-            ]
-        ]
-        .iloc[0]
-        .dropna()
-        .to_dict()
-    )
-    services = str(
-        df[["Service_id", "Service_Name", "Note", "Reason"]]
-        .dropna(axis=1)
-        .set_index("Service_id")
-        .to_dict(orient="records")
-    )
-    return patient_info, services
 
 
 def processing_thoughts(text):

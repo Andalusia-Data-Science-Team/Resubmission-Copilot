@@ -1,77 +1,66 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 import pandas as pd
 from resubmission.models import Policy
-from resubmission.utils import llm_response, normalize_text, read_data
+from resubmission.utils import get_visits_by_date, get_visit_data, get_policy_details, llm_response
 import json
-from pathlib import Path
 
 app = Flask(__name__)
-app.secret_key = "your-secret-key-here"  # Change this to a random secret key
-
-with open("passcode.json", "r") as file:
-    db_configs = json.load(file)
-db_configs = db_configs["DB_NAMES"]
-read_passcode = db_configs["Replica"]
-
-sql_path = Path("SQL") / "resubmission.sql"
-with open(sql_path, "r") as file:
-    query = file.read()
-
-sf = pd.read_csv("Data/sfda_list.csv").rename(columns={"NameEn": "Service_Name"})
-
-
-def get_visit_data(visit_id):
-    """Fetch and process visit data once"""
-    df = read_data(query, read_passcode, params=(visit_id,))
-    df["Contract"] = (
-        df["Contract"]
-        .fillna("")  # ensure no NaN
-        .astype(str)
-        .str.split("-", n=1)
-        .pipe(lambda p: p.apply(lambda x: x[1].strip() if len(x) > 1 else x[0].strip()))
-    )
-    df = pd.merge(df, sf, on="Service_Name", how="left")
-
-    if df.empty:
-        return None, None, None, None
-
-    policy = Policy.objects(
-        policy_number=df["ContractorClientPolicyNumber"].iloc[0]
-    ).first()
-    if not policy:
-        policy = Policy.objects(
-            policy_number=df["ContractorClientPolicyNumber2"].iloc[0]
-        ).first()
-
-    vip_level = normalize_text(df["Contract"].iloc[0])
-    selected = [
-        c for c in policy.coverage_details if normalize_text(c.vip_level) == vip_level
-    ]
-
-    if not selected:
-        available_levels = [c.vip_level for c in policy.coverage_details]
-        return df, policy, None, available_levels
-
-    detail = selected[0].to_mongo().to_dict()
-    return df, policy, detail, None
+app.secret_key = "my-secret-key"
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    visit_ids = []
+    show_dropdown = False
+    start_date = None
+    end_date = None
+
     if request.method == "POST":
+        start_date = request.form.get("start_date")
+        end_date = request.form.get("end_date")
         visit_id = request.form.get("visit_id")
-        if visit_id:
-            return redirect(url_for("visit_detail", visit_id=visit_id))
-    return render_template("index.html")
+
+        # Date search takes priority (if start_date exists, it's the date form)
+        if start_date and end_date:
+            visit_ids = get_visits_by_date(start_date, end_date)
+
+            if visit_ids is not None and not visit_ids.empty:
+                show_dropdown = True
+                visit_ids = visit_ids.tolist()
+
+                # Store in session for persistence
+                session['last_search'] = {
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'visit_ids': visit_ids
+                }
+            else:
+                return render_template(
+                    "index.html",
+                    error_message=f"No Bupa visits were found between {start_date} and {end_date}. Please try different dates.",
+                    error_type="warning",
+                )
+
+        # Visit selection (after date search was done)
+        elif visit_id:
+            return redirect(url_for("display_policy_details", visit_id=visit_id))
+
+    return render_template(
+        "index.html",
+        visit_ids=visit_ids,
+        show_dropdown=show_dropdown,
+        start_date=start_date,
+        end_date=end_date
+    )
 
 
 @app.route("/visit/<visit_id>")
-def visit_detail(visit_id):
-    df, policy, detail, available_levels = get_visit_data(visit_id)
-
+def display_policy_details(visit_id):
+    df = get_visit_data(visit_id)
     if df is None:
-        return render_template("error.html", message="Visit ID not found")
+        return render_template("error.html", message="No BE or CV Rejections Were Found for This Visit")
 
+    policy, detail, available_levels = get_policy_details(df)
     if detail is None:
         return render_template(
             "error.html",
@@ -79,40 +68,41 @@ def visit_detail(visit_id):
             available_levels=available_levels,
         )
 
-    # Store data in session for chat route
+    # Store data in session for the chat route
     session[f"visit_data_{visit_id}"] = {
         "df": df.to_json(),
         "policy_number": policy.policy_number,
         "detail": json.dumps(detail, default=str),
     }
 
+    # Retrieve last search data from session
+    last_search = session.get('last_search', {})
+    visit_ids = last_search.get('visit_ids', [])
+    start_date = last_search.get('start_date')
+    end_date = last_search.get('end_date')
+    show_dropdown = bool(visit_ids)
+
+    # display policy details
     return render_template(
         "index.html",
         selected_visit=visit_id,
         df=df.to_dict(orient="records"),
         policy=policy,
         detail=detail,
+        visit_ids=visit_ids,
+        show_dropdown=show_dropdown,
+        start_date=start_date,
+        end_date=end_date
     )
 
 
 @app.route("/chat/<visit_id>", methods=["GET", "POST"])
 def chat(visit_id):
-    # Try to get cached data from session first
+    # Get cached data from session that was stored in visit detail route
     cached_data = session.get(f"visit_data_{visit_id}")
-
-    if cached_data:
-        df = pd.read_json(cached_data["df"])
-        policy = Policy.objects(policy_number=cached_data["policy_number"]).first()
-        detail = json.loads(cached_data["detail"])
-    else:
-        # Fetch if not in session
-        df, policy, detail, available_levels = get_visit_data(visit_id)
-
-        if df is None:
-            return render_template("error.html", message="Visit ID not found")
-
-        if detail is None:
-            return jsonify({"error": "No coverage found."})
+    df = pd.read_json(cached_data["df"])
+    policy = Policy.objects(policy_number=cached_data["policy_number"]).first()
+    detail = json.loads(cached_data["detail"])
 
     if request.method == "POST":
         user_input = request.form.get("message")

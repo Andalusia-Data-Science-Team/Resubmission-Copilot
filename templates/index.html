@@ -4,18 +4,75 @@
 <!-- Search Card -->
 <div class="card shadow-sm mb-4">
   <div class="card-body p-4">
-    <form method="post">
-      <label for="visit" class="form-label fw-bold fs-5">🔍 Enter Visit ID</label>
+    <h5 class="fw-bold fs-5 mb-4">🔍 Search for Visits</h5>
+    
+    <!-- Date Range Form -->
+    <form method="post" id="date-form">
+      <div class="row g-3 mb-3">
+        <div class="col-md-5">
+          <label for="start_date" class="form-label fw-semibold">Start Date</label>
+          <input type="date" name="start_date" id="start_date" class="form-control form-control-lg" 
+                 value="{{ start_date or '' }}" required>
+        </div>
+        <div class="col-md-5">
+          <label for="end_date" class="form-label fw-semibold">End Date</label>
+          <input type="date" name="end_date" id="end_date" class="form-control form-control-lg" 
+                 value="{{ end_date or '' }}" required>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary btn-lg w-100">
+            <i class="bi bi-search"></i> Search
+          </button>
+        </div>
+      </div>
+      <small class="form-text text-muted">Select a date range to find available visits</small>
+    </form>
+    
+    <!-- Visit ID Dropdown (shown after date search) -->
+    {% if show_dropdown and visit_ids %}
+    <hr class="my-4">
+    <form method="post" action="{{ url_for('home') }}" id="visit-form">
+      <label for="visit_id" class="form-label fw-semibold">Select Visit ID</label>
       <div class="input-group input-group-lg">
-        <input type="text" name="visit_id" id="visit" class="form-control" 
-               placeholder="e.g. 489064" required autofocus>
-        <button type="submit" class="btn btn-primary px-5">
-          <i class="bi bi-search"></i> Search
+        <select name="visit_id" id="visit_id" class="form-select" required>
+          <option value="" {% if not selected_visit %}selected{% endif %} disabled>Choose a visit ID...</option>
+          {% for vid in visit_ids %}
+          <option value="{{ vid }}" {% if selected_visit and vid|string == selected_visit|string %}selected{% endif %}>{{ vid }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-success px-4">
+          <i class="bi bi-arrow-right-circle"></i> View Details
         </button>
       </div>
+      <small class="form-text text-muted mt-2 d-block">Found {{ visit_ids|length }} visit(s)</small>
     </form>
+    {% endif %}
   </div>
 </div>
+
+<!-- Error Message Display -->
+{% if error_message %}
+<div class="card shadow-sm mb-4 border-{{ 'danger' if error_type == 'error' else 'warning' }}">
+  <div class="card-body">
+    <div class="streamlit-error {{ error_type }}">
+      <div class="error-icon">
+        {% if error_type == 'error' %}
+        ⚠️
+        {% else %}
+        ℹ️
+        {% endif %}
+      </div>
+      <div class="error-content">
+        <strong>{{ error_type|capitalize }}</strong>
+        <p>{{ error_message }}</p>
+        {% if available_levels %}
+        <p class="error-hint">Available levels: {{ available_levels|join(', ') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
 
 {% if policy %}
 <!-- Policy Header -->
@@ -76,7 +133,7 @@
         <tbody>
           {% for row in df %}
           <tr>
-            <td class="text-center">{{ row.Start_Date }}</td>
+            <td class="text-center">{{ row.Start_Date|string|truncate(19, True, '') }}</td>
             <td class="text-center">{{ row.Med_Dept }}</td>
             <td class="text-center">{{ row.Specialty_Name }}</td>
             <td class="text-center">{{ row.Contract }}</td>
@@ -128,6 +185,7 @@
   <span class="btn-text">Ask Assistant</span>
 </a>
 {% endif %}
+{% endif %}
 
 <style>
 .card {
@@ -170,6 +228,58 @@ code {
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.9em;
+}
+
+/* Error Message Styling */
+.streamlit-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background-color: #fff3cd;
+  border-radius: 8px;
+}
+
+.streamlit-error.error {
+  background-color: #f8d7da;
+}
+
+.error-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.error-content {
+  flex: 1;
+}
+
+.error-content strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #721c24;
+}
+
+.streamlit-error.warning .error-content strong {
+  color: #856404;
+}
+
+.error-content p {
+  margin: 0 0 8px 0;
+  color: #721c24;
+}
+
+.streamlit-error.warning .error-content p {
+  color: #856404;
+}
+
+.error-hint {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #6c757d;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.1);
 }
 
 /* Floating Chat Button */

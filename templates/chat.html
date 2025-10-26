@@ -29,7 +29,7 @@
         <tbody>
           {% for row in df %}
           <tr>
-            <td class="text-center">{{ row.Start_Date }}</td>
+            <td class="text-center">{{ row.Start_Date|string|truncate(19, True, '') }}</td>
             <td class="text-center">{{ row.Med_Dept }}</td>
             <td class="text-center">{{ row.Specialty_Name }}</td>
             <td class="text-center">{{ row.Contract }}</td>

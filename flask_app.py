@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session , render_template_string
 import pandas as pd
 from resubmission.const import INDEX
 from resubmission.models import Policy
@@ -9,8 +9,13 @@ from resubmission.utils import (
     llm_response,
 )
 import json
+from flask_session import Session
+from datetime import timedelta
 
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'  # or 'redis'
+app.permanent_session_lifetime = timedelta(hours=2)
+Session(app)
 app.secret_key = "my-secret-key"
 
 
@@ -60,9 +65,21 @@ def home():
     )
 
 
-@app.route("/visit/<visit_id>")
+@app.route("/visit/<visit_id>", methods=["GET", "POST"])
 def display_policy_details(visit_id):
     df = get_visit_data(visit_id)
+    if request.method == "POST":
+        data = {"start_date": request.form.get("start_date"), "end_date": request.form.get("end_date")}
+
+        # Render a hidden form that auto-submits as POST to "/"
+        return render_template_string("""
+            <form id="redirForm" method="POST" action="{{ url_for('home') }}">
+                {% for key, val in data.items() %}
+                    <input type="hidden" name="{{ key }}" value="{{ val }}">
+                {% endfor %}
+            </form>
+            <script>document.getElementById('redirForm').submit();</script>
+        """, data=data)
     if df is None:
         return render_template(
             "error.html", message="No BE or CV Rejections Were Found for This Visit"

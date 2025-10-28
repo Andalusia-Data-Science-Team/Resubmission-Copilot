@@ -3,8 +3,10 @@ import pandas as pd
 from dotenv import load_dotenv
 from langchain_fireworks import ChatFireworks
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain.memory import ConversationBufferWindowMemory
+from langchain.chains import ConversationChain
 from src.resubmission.models import Policy, CoverageDetail
-from src.resubmission.prompt import chatbot_prompt
+from src.resubmission.prompt import chatbot_prompt, justification_prompt
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -15,6 +17,7 @@ from pathlib import Path
 import json
 from datetime import datetime
 
+memory = ConversationBufferWindowMemory(k=6, return_messages=True)
 sf = pd.read_csv("Data/sfda_list.csv").rename(columns={"NameEn": "Service_Name"})
 
 with open("passcode.json", "r") as file:
@@ -97,22 +100,24 @@ def extract_drug_code(text):
 
 
 def llm_response(
-    policy, visit_info, question, model="accounts/fireworks/models/gpt-oss-120b"
+    policy,
+    visit_info,
+    user_input,
+    model="accounts/fireworks/models/gpt-oss-120b",
 ):
-    chat_model = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
-    chat_history = [
-        SystemMessage(content=chatbot_prompt),
-        HumanMessage(content=policy),
-        SystemMessage(
-            content="""For your context, these are the services that were provided to the patient during their visit to the hospital.
-        You should reference to them if you're asked about it directly.
-        """
-        ),
-        HumanMessage(content=visit_info),
-        HumanMessage(content=question),
-    ]
-    response = chat_model.invoke(chat_history).content
-    return response
+    llm = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
+    conversation = ConversationChain(
+        llm=llm,
+        memory=memory,
+    )
+    conversation.memory.chat_memory.add_message(SystemMessage(content=chatbot_prompt))
+    conversation.memory.chat_memory.add_message(SystemMessage(content=policy))
+    conversation.memory.chat_memory.add_message(SystemMessage(content=(
+        "For your context, these are the services provided during the visit. "
+        "Reference them if needed."
+    )))
+    conversation.memory.chat_memory.add_message(HumanMessage(content=visit_info))
+    return conversation.predict(input=user_input)
 
 
 def processing_thoughts(text):
@@ -315,3 +320,14 @@ def normalize_text(text: str) -> str:
     if not isinstance(text, str):
         return text  # handle non-string values safely
     return text.replace(" ", "").replace("–", "").replace("-", "").lower()
+
+
+def generate_justification(claim, policy, model="accounts/fireworks/models/deepseek-v3p1"):
+    chat_model = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
+    chat_history = [
+        SystemMessage(content=justification_prompt),
+        HumanMessage(content=policy),
+        HumanMessage(content=str(claim)),
+    ]
+    response = chat_model.invoke(chat_history).content
+    return response

@@ -1,34 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<!-- Visit Data Table -->
+<!-- Visit Information Card -->
 {% if df %}
 <div class="card shadow-sm mb-4">
   <div class="card-header bg-primary text-white">
-    <h5 class="mb-0">📊 Visit Details</h5>
+    <h5 class="mb-0">📊 Visit Details {{ visit_id }}</h5>
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered table-hover mb-0">
+      <table class="table table-sm table-bordered table-hover mb-0" id="visit-table">
         <thead class="table-light">
           <tr>
             <th class="text-center">Start Date</th>
             <th class="text-center">Department</th>
             <th class="text-center">Specialty</th>
             <th class="text-center">Contract</th>
-            <th class="text-center">Service Name</th>
-            <th class="text-center">Response Reason</th>
+            <th class="text-center">Service</th>
+            <th class="text-center">Rejection Reason</th>
             <th class="text-center">Response Code</th>
             <th class="text-center">Price</th>
             <th class="text-center">Diagnosis</th>
-            <th class="text-center">ICD10 Code</th>
+            <th class="text-center">ICD10</th>
             <th class="text-center">SFDA Status</th>
             <th class="text-center">SFDA Code</th>
           </tr>
         </thead>
         <tbody>
           {% for row in df %}
-          <tr>
+          <tr class="visit-row" data-row-index="{{ loop.index0 }}">
             <td class="text-center">{{ row.Start_Date|string|truncate(19, True, '') }}</td>
             <td class="text-center">{{ row.Med_Dept }}</td>
             <td class="text-center">{{ row.Specialty_Name }}</td>
@@ -36,11 +36,24 @@
             <td class="text-center">{{ row.Service_Name }}</td>
             <td class="text-center">{{ row.ResponseReason }}</td>
             <td class="text-center"><code>{{ row.ResponseReasonCode }}</code></td>
-            <td class="text-center"><strong>{{ row.Price }}</strong></td>
+            <td class="text-center">{{ row.Price }}</td>
             <td class="text-center">{{ row.Diagnose_Name }}</td>
             <td class="text-center"><code>{{ row['ICD10 Code'] }}</code></td>
             <td class="text-center">{{ row.SFDAStatus }}</td>
             <td class="text-center"><code>{{ row.SFDACode }}</code></td>
+            <td class="justify-btn-cell">
+              <button class="btn btn-sm btn-outline-primary justify-btn"
+                      data-row='{{ {
+                        "Med_Dept": row.Med_Dept,
+                        "Specialty_Name": row.Specialty_Name,
+                        "Service_Name": row.Service_Name,
+                        "ResponseReason": row.ResponseReason,
+                        "Diagnose_Name": row.Diagnose_Name,
+                        "ICD10 Code": row["ICD10 Code"]
+                      } | tojson }}'>
+                ✨ Generate Justification
+              </button>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -86,6 +99,18 @@
 <style>
 #chat-box {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.card.shadow-sm.mb-4 {
+  width: 1300px;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.card-body {
+  overflow-x: auto;      /* horizontal scroll for small screens */
 }
 
 .message-user {
@@ -164,6 +189,74 @@
     transform: translateY(-10px);
   }
 }
+
+/* Table Row Hover Effects */
+.visit-row {
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.visit-row:hover {
+  background-color: rgba(102, 126, 234, 0.08) !important;
+}
+
+.justify-btn-cell {
+  padding: 4px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.justify-btn {
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  white-space: nowrap;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.visit-row:hover .justify-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.justify-btn:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.justify-btn:active {
+  transform: scale(0.98) !important;
+}
+
+.justify-btn i {
+  font-size: 0.9rem;
+  margin-right: 4px;
+}
+
+/* Loading state for button */
+.justify-btn.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.justify-btn.loading::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 </style>
 
 <script>
@@ -175,6 +268,53 @@ const loadingIcon = document.getElementById('loading-icon');
 
 // Clear initial placeholder
 let isFirstMessage = true;
+
+// Handle justification button clicks
+document.querySelectorAll('.justify-btn').forEach(btn => {
+  btn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const rowData = JSON.parse(this.getAttribute('data-row'));
+    const button = this;
+    
+    // Show loading state
+    button.classList.add('loading');
+    button.disabled = true;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="bi bi-hourglass-split"></i> Generating...';
+    
+    try {
+      const response = await fetch(`/chat/{{ visit_id }}`, {
+          method: 'POST',
+          body: JSON.stringify(rowData),
+          headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const data = await response.json();
+      
+      // Clear initial placeholder if needed
+      if (isFirstMessage) {
+        box.innerHTML = '';
+        isFirstMessage = false;
+      }
+      
+      // Add justification as assistant message
+      const assistantMsgContainer = document.createElement('div');
+      assistantMsgContainer.className = 'message-container-assistant';
+      assistantMsgContainer.innerHTML = `<div class="message-assistant">${escapeHtml(data.justification)}</div>`;
+      box.appendChild(assistantMsgContainer);
+      box.scrollTop = box.scrollHeight;
+      
+    } catch (error) {
+      console.error('Error generating justification:', error);
+      alert('Failed to generate justification. Please try again.');
+    } finally {
+      // Reset button state
+      button.classList.remove('loading');
+      button.disabled = false;
+      button.innerHTML = originalText;
+    }
+  });
+});
 
 form.addEventListener('submit', async e => {
   e.preventDefault();

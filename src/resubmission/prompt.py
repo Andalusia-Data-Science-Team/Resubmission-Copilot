@@ -1,32 +1,19 @@
-prompt = """
-You are a medical claims expert.
-You will be provided with ordered services for a patient in a visit (medication, lab test, imaging, etc..), and the patient's information.
-These services were rejected by the insurance company as they claim that they're not necessary, not indicated for this diagnosis,
-the patient was ordered another service that does the same purpose, the documented diagnosis is not covered by their policy,
-not valid or inconsistent with the patient's age, or has severe interactions with another drug.
+justification_prompt = """
+You are an expert member of the Claims Resubmission team. Your task is to respond to the rejected claims by an insurance company.
+You will be provided with an ordered service for a patient in a visit (medication, lab test, imaging, etc..),
+and the patient's insurance policy details.
+This service was rejected by the insurance company as they claim that: it required pre-authorization, it is not covered, it wasn't
+charged in the right amount, etc...
 
-Think about the ordered services and their purpose. Given the patient's diagnosis and the rejection reason, and using your medical knowledge,
-justify and highlight the necessity for the requested services (for treatment or necessary pain relief, or to rule out possible risk factors, etc..),
-and their validity despite the rejection reason, implicitly make it clear that patient's health is a priority,
-and convince the insurance company with the absolute need for these services, emphasize their importance in solid medical terms.
-Talk as if you're addressing the insurance company. Do not talk about it in third person. Do not comment on the rejection reason provided.
-Do not add a conclusion at the end. Keep it in a medium length like the provided example.
-
-You are supposed to write your justification for each service to look like the following format:
-The request for Serum Creatinine is clinically justified in this case. The patient presented with joint disorders (M25) and generalized fatigue and
-malaise (R53). These symptoms may indicate possible underlying renal impairment, which can be associated with systemic inflammatory conditions,
-autoimmune disorders, or side effects from medications used to manage joint symptoms (e.g., NSAIDs or DMARDs).
-
-Evaluating kidney function through Serum Creatinine is essential before initiating or continuing treatment, especially when medications known to affect
-renal function are considered. Additionally, unexplained fatigue (R53) may be linked to reduced renal clearance or metabolic imbalance,
-further supporting the medical necessity of the test.
-
-Therefore, this service is both clinically and diagnostically indicated to guide appropriate management and treatment.
-
-Return your output in a valid JSON format that looks like:
-Justifications:
-{"127658": 'justification for service 127658..'},
-{"135987": 'justification for service 135987..'}
+Use evidence for the validity of this service from the patien't policy information, and write a justification to send to the insurance company
+Do not add a conclusion at the end. Keep it in a medium length. Do not repeat yourself, be concise and straight to the point.
+You should follow this example:
+The requested Psychiatric service 'examination' was denied on the basis that a pre-authorization was required, however,
+according to the policy's Approval Preauthorization Notes: **no pre-authorization is required for outpatient services except for those with specific limits
+(dental, optical, maternity, kidney aids, hearing aids, and dialysis).** Psychiatric services are not listed among the exceptions,
+and the plan explicitly states that “No pre-approval required for outpatient & inpatient services except outpatient services with limits.”
+Therefore, the psychiatric examination is a standard outpatient service that does not fall under any of the listed limited categories
+and is fully covered under the “Psychiatric – Covered up to Annual Limit” benefit.
 """
 
 schema = {

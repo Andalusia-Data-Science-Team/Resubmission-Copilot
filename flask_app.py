@@ -7,10 +7,12 @@ from resubmission.utils import (
     get_visit_data,
     get_policy_details,
     llm_response,
+    generate_justification
 )
 import json
 from flask_session import Session
 from datetime import timedelta
+from io import StringIO
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'  # or 'redis'
@@ -123,24 +125,35 @@ def display_policy_details(visit_id):
 
 @app.route("/chat/<visit_id>", methods=["GET", "POST"])
 def chat(visit_id):
-    # Get cached data from session that was stored in visit detail route
     cached_data = session.get(f"visit_data_{visit_id}")
-    df = pd.read_json(cached_data["df"])
-    policy = Policy.objects(policy_number=cached_data["policy_number"]).first()
+    df = pd.read_json(StringIO(cached_data["df"]))
     detail = json.loads(cached_data["detail"])
 
+    # Handle POST requests (chat messages or justification)
     if request.method == "POST":
-        user_input = request.form.get("message")
-        visit_info = str(
-            df[["Med_Dept", "Specialty_Name", "Diagnose_Name", "ICD10 Code"]]
-            .iloc[0]
-            .to_dict()
-        ) + str(df[["Service_Name", "Price"]].to_dict(orient="records"))
-        assistant_reply = llm_response(str(detail), visit_info, user_input)
-        return jsonify({"response": assistant_reply})
+        # Case 1: Chat message (form submission)
+        if request.content_type == "application/x-www-form-urlencoded":
+            user_input = request.form.get("message")
+            visit_info = str(
+                df[["Med_Dept", "Specialty_Name", "Diagnose_Name", "ICD10 Code"]]
+                .iloc[0]
+                .to_dict()
+            ) + str(df[["Service_Name", "Price"]].to_dict(orient="records"))
 
+            assistant_reply = llm_response(str(detail), visit_info, user_input)
+            return jsonify({"response": assistant_reply})
+
+        # Case 2: Generate Justification (button click)
+        elif request.content_type == "application/json":
+            data = request.get_json()
+            justification_text = generate_justification(data, str(detail))
+            return jsonify({"justification": justification_text})
+
+    # GET request — render the chat page
     return render_template(
-        "chat.html", visit_id=visit_id, df=df.to_dict(orient="records"), policy=policy
+        "chat.html",
+        visit_id=visit_id,
+        df=df.to_dict(orient="records"),
     )
 
 

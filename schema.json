@@ -1,0 +1,616 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "policy_number": {
+      "description": "The policy number of the insurance.",
+      "type": "string"
+    },
+    "company_name": {
+      "description": "The name of the company holding the insurance policy.",
+      "type": "string"
+    },
+    "policy_holder": {
+      "description": "The name of the policy holder.",
+      "type": "string"
+    },
+    "effective_from": {
+      "description": "The date the policy becomes effective (YYYY-MM-DD).",
+      "type": "string"
+    },
+    "effective_to": {
+      "description": "The date the policy expires (YYYY-MM-DD).",
+      "type": "string"
+    },
+    "coverage_details": {
+      "description": "An array of coverage details for different VIP levels.",
+      "items": {
+        "properties": {
+          "vip_level": {
+            "description": "The VIP level (e.g., VVIP, VIP+, VIP, VIP (KAEC)).",
+            "type": "string"
+          },
+          "overall_annual_limit": {
+            "anyOf": [
+              {
+                "description": "The overall annual coverage limit.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The overall annual coverage limit."
+          },
+          "inpatient_outpatient_treatment": {
+            "anyOf": [
+              {
+                "description": "Coverage for inpatient and outpatient treatment (e.g., Both).",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage for inpatient and outpatient treatment (e.g., Both)."
+          },
+          "accommodation": {
+            "anyOf": [
+              {
+                "description": "Accommodation details (e.g., Single Room, Shared Room).",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Accommodation details (e.g., Single Room, Shared Room)."
+          },
+          "outpatient_deductible_mpn": {
+            "anyOf": [
+              {
+                "description": "Outpatient deductible at Minimum Provider Network.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Outpatient deductible at Minimum Provider Network."
+          },
+          "outpatient_deductible_hospitals": {
+            "anyOf": [
+              {
+                "description": "Outpatient deductible at hospitals.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Outpatient deductible at hospitals."
+          },
+          "outpatient_deductible_polyclinic": {
+            "anyOf": [
+              {
+                "description": "Outpatient deductible at polyclinics.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Outpatient deductible at polyclinics."
+          },
+          "branded_medication_deductible": {
+            "anyOf": [
+              {
+                "description": "Deductible for branded medication.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Deductible for branded medication."
+          },
+          "generic_medication_deductible": {
+            "anyOf": [
+              {
+                "description": "Deductible for generic medication.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Deductible for generic medication."
+          },
+          "network": {
+            "anyOf": [
+              {
+                "description": "The approved service provider network (e.g., NW7).",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The approved service provider network (e.g., NW7)."
+          },
+          "std": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for Sexually Transmitted Diseases.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for Sexually Transmitted Diseases."
+          },
+          "menopausal": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for Menopausal conditions.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for Menopausal conditions."
+          },
+          "post_menopausal": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for Post Menopausal conditions.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for Post Menopausal conditions."
+          },
+          "premature_babies_treatment": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for treatment of premature babies.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for treatment of premature babies."
+          },
+          "checkup": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for checkups.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for checkups."
+          },
+          "vaccination": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for vaccinations as per MOH schedule.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for vaccinations as per MOH schedule."
+          },
+          "optical_frame": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for optical frames.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for optical frames."
+          },
+          "birth_control": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for birth control.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for birth control."
+          },
+          "obesity_surgery_bmi_over_35": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for obesity surgery with BMI > 35.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for obesity surgery with BMI > 35."
+          },
+          "obesity_surgery_bmi_over_40": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for obesity surgery with BMI > 40.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for obesity surgery with BMI > 40."
+          },
+          "kidney_transplant": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for kidney transplant.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for kidney transplant."
+          },
+          "bone_marrow_transplant": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for bone marrow transplant.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for bone marrow transplant."
+          },
+          "organ_transplant": {
+            "description": "Coverage limit, details, and any notes for general organ transplant.",
+            "type": "string"
+          },
+          "separate_plan_limit": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for separate plan limit.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for separate plan limit."
+          },
+          "neonatal_screening": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for neonatal screening.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for neonatal screening."
+          },
+          "psychiatric": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for psychiatric conditions.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for psychiatric conditions."
+          },
+          "dialysis": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for dialysis coverage.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for dialysis coverage."
+          },
+          "hearing_aids_audiometry": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for hearing aids and audiometry.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for hearing aids and audiometry."
+          },
+          "dental_general": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for general dental treatments.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for general dental treatments."
+          },
+          "dental_corrective": {
+            "description": "Coverage limit, details, and any notes for corrective dental treatments.",
+            "type": "string"
+          },
+          "dental_emergency": {
+            "description": "Coverage limit, details, and any notes for emergency dental treatments.",
+            "type": "string"
+          },
+          "neo_natal_care": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for neo-natal care.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for neo-natal care."
+          },
+          "circumcision": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for circumcision.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for circumcision."
+          },
+          "acquired_heart_valves_disease": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for acquired heart valves disease.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for acquired heart valves disease."
+          },
+          "newborn_disability_screening": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for newborn disability screening.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for newborn disability screening."
+          },
+          "alzheimers": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for Alzheimer's disease.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for Alzheimer's disease."
+          },
+          "congenital": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for congenital conditions.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for congenital conditions."
+          },
+          "maternity": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for maternity.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for maternity."
+          },
+          "optical": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for optical expenses.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for optical expenses."
+          },
+          "autism": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for autism.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for autism."
+          },
+          "ear_piercing": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for ear piercing.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for ear piercing."
+          },
+          "screening": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for general screening.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for general screening."
+          },
+          "disability_cases": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for disability cases.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for disability cases."
+          },
+          "donor_organ_harvesting": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for donor organ harvesting.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for donor organ harvesting."
+          },
+          "physiotherapy": {
+            "anyOf": [
+              {
+                "description": "Coverage limit, details, and any notes for physiotherapy.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coverage limit, details, and any notes for physiotherapy."
+          },
+          "approval_preauthorization_notes": {
+            "anyOf": [
+              {
+                "description": "Any notes on required approvals and pre-authorization for this vip level.",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Any notes on required approvals and pre-authorization for this vip level."
+          },
+          "special_instructions": {
+            "description": "Any other text notes regarding this vip level.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vip_level",
+          "overall_annual_limit",
+          "inpatient_outpatient_treatment",
+          "accommodation",
+          "outpatient_deductible_mpn",
+          "outpatient_deductible_hospitals",
+          "outpatient_deductible_polyclinic",
+          "branded_medication_deductible",
+          "generic_medication_deductible",
+          "network",
+          "std",
+          "menopausal",
+          "post_menopausal",
+          "premature_babies_treatment",
+          "checkup",
+          "vaccination",
+          "optical_frame",
+          "birth_control",
+          "obesity_surgery_bmi_over_35",
+          "obesity_surgery_bmi_over_40",
+          "kidney_transplant",
+          "bone_marrow_transplant",
+          "organ_transplant",
+          "separate_plan_limit",
+          "neonatal_screening",
+          "psychiatric",
+          "dialysis",
+          "hearing_aids_audiometry",
+          "dental_general",
+          "dental_corrective",
+          "dental_emergency",
+          "neo_natal_care",
+          "circumcision",
+          "acquired_heart_valves_disease",
+          "newborn_disability_screening",
+          "alzheimers",
+          "congenital",
+          "maternity",
+          "optical",
+          "autism",
+          "ear_piercing",
+          "screening",
+          "disability_cases",
+          "donor_organ_harvesting",
+          "physiotherapy",
+          "approval_preauthorization_notes",
+          "special_instructions"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "policy_number",
+    "company_name",
+    "policy_holder",
+    "effective_from",
+    "effective_to",
+    "coverage_details"
+  ],
+  "type": "object"
+}

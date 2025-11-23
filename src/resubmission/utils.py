@@ -18,7 +18,7 @@ import json
 from datetime import datetime
 
 memory = ConversationBufferWindowMemory(k=6, return_messages=True)
-sf = pd.read_csv("Data/sfda_list.csv").rename(columns={"NameEn": "Service_Name"})
+sf = pd.read_csv(Path("Data") / "sfda_list.csv")
 
 with open("passcode.json", "r") as file:
     db_configs = json.load(file)

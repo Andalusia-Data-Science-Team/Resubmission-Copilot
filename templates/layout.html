@@ -11,19 +11,70 @@
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   
   <style>
+    :root {
+      --cream: #f8f5f2;
+      --dark-brown: #7c4c24;
+      --medium-brown: #B87c4c;
+      --light-brown: #EBD9D1;
+      --warm-brown: #A36A40;
+    }
+    
     body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: var(--cream);
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: #333;
     }
     
     header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, var(--dark-brown) 0%, var(--warm-brown) 100%);
+      box-shadow: 0 4px 12px rgba(124, 76, 36, 0.15);
+      border-bottom: 3px solid var(--medium-brown);
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+    }
+    
+    .logo-container {
+      position: absolute;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .logo-container:hover {
+      transform: scale(1.05);
+    }
+    
+    .logo-container img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+    }
+    
+    /* If no image is provided, show icon */
+    .logo-icon {
+      font-size: 2rem;
+      color: var(--dark-brown);
     }
     
     header h2 {
@@ -31,6 +82,7 @@
       letter-spacing: 0.5px;
       margin: 0;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
     }
     
     .container {
@@ -38,45 +90,67 @@
     }
     
     .shadow-sm {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 2px 12px rgba(124, 76, 36, 0.08) !important;
     }
     
     .card {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: white;
+      border: 1px solid var(--light-brown);
     }
     
     .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 16px rgba(124, 76, 36, 0.12) !important;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, var(--medium-brown) 0%, var(--warm-brown) 100%) !important;
+      color: white !important;
+      border-bottom: 2px solid var(--dark-brown);
     }
     
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--dark-brown) 0%, var(--warm-brown) 100%);
       border: none;
       transition: all 0.3s ease;
+      color: white;
     }
     
     .btn-primary:hover {
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      background: linear-gradient(135deg, var(--warm-brown) 0%, var(--dark-brown) 100%);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(124, 76, 36, 0.3);
     }
     
     .btn-success {
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      background: linear-gradient(135deg, var(--medium-brown) 0%, var(--warm-brown) 100%);
       border: none;
       transition: all 0.3s ease;
+      color: white;
     }
     
     .btn-success:hover {
-      background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+      background: linear-gradient(135deg, var(--warm-brown) 0%, var(--medium-brown) 100%);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+      box-shadow: 0 4px 12px rgba(184, 124, 76, 0.3);
     }
     
-    .form-control:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    .btn-outline-primary {
+      color: var(--dark-brown);
+      border-color: var(--dark-brown);
+    }
+    
+    .btn-outline-primary:hover {
+      background: var(--dark-brown);
+      border-color: var(--dark-brown);
+      color: white;
+    }
+    
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--medium-brown);
+      box-shadow: 0 0 0 0.2rem rgba(184, 124, 76, 0.25);
     }
     
     .badge {
@@ -84,18 +158,58 @@
       letter-spacing: 0.3px;
     }
     
+    .bg-success {
+      background: var(--medium-brown) !important;
+    }
+    
+    .bg-primary {
+      background: var(--dark-brown) !important;
+    }
+    
+    .bg-info {
+      background: var(--warm-brown) !important;
+    }
+    
     .table-hover tbody tr:hover {
-      background-color: rgba(102, 126, 234, 0.05);
+      background-color: rgba(235, 217, 209, 0.3);
+    }
+    
+    .table-light {
+      background-color: var(--light-brown) !important;
+    }
+    
+    .bg-light {
+      background-color: var(--cream) !important;
+    }
+    
+    code {
+      background-color: var(--light-brown);
+      color: var(--dark-brown);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    .text-primary {
+      color: var(--dark-brown) !important;
+    }
+    
+    footer {
+      background: var(--light-brown);
+      border-top: 2px solid var(--medium-brown);
+      color: var(--dark-brown);
     }
   </style>
 </head>
 <body>
-  <header class="text-white text-center py-4 mb-4">
+  <header class="text-white py-4 mb-4">
     <div class="container">
-      <h2>
-        <i class="bi bi-search-heart me-2"></i>
-        Smart Search - AI Policy Finder
-      </h2>
+      <div class="header-content">
+
+        <h2>
+          Smart Search - AI Policy Finder
+        </h2>
+      </div>
     </div>
   </header>
 
@@ -103,7 +217,7 @@
     {% block content %}{% endblock %}
   </div>
 
-  <footer class="text-center text-muted py-4 mt-5">
+  <footer class="text-center py-4 mt-5">
     <div class="container">
       <small>&copy; 2025 Resubmission Copilot. All rights reserved.</small>
     </div>

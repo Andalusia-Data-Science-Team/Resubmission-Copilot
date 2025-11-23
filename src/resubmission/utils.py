@@ -105,7 +105,7 @@ def llm_response(
     user_input,
     model="accounts/fireworks/models/gpt-oss-120b",
 ):
-    llm = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
+    llm = ChatFireworks(model=model, temperature=0.2, model_kwargs={"stream": True}, max_tokens=10000)
     conversation = ConversationChain(
         llm=llm,
         memory=memory,
@@ -117,7 +117,18 @@ def llm_response(
         "Reference them if needed."
     )))
     conversation.memory.chat_memory.add_message(HumanMessage(content=visit_info))
-    return conversation.predict(input=user_input)
+
+    stream = llm.stream(
+        conversation.memory.chat_memory.messages
+        + [HumanMessage(content=user_input)]
+    )
+
+    full_response = ""
+    for chunk in stream:
+        if hasattr(chunk, "content") and chunk.content:
+            full_response += chunk.content
+
+    return full_response
 
 
 def processing_thoughts(text):
@@ -283,11 +294,7 @@ def insert(data_source):
             if "effective_from" in data
             else None
         ),
-        effective_to=(
-            datetime.fromisoformat(data["effective_to"])
-            if "effective_to" in data
-            else None
-        ),
+        effective_to=datetime.fromisoformat(data.get("effective_to")) if data.get("effective_to") not in (None, "") else None,
         coverage_details=coverage_list,
     )
 

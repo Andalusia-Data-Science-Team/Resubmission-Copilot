@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session , render_template_string
+from pymongo.errors import ServerSelectionTimeoutError
 import pandas as pd
 from resubmission.const import INDEX
-from resubmission.models import Policy
+# from resubmission.models import Policy
 from resubmission.utils import (
     get_visits_by_date,
     get_visit_data,
     get_policy_details,
     llm_response,
-    generate_justification
-)
+    generate_justification)
 import json
 from flask_session import Session
 from datetime import timedelta
@@ -87,7 +87,17 @@ def display_policy_details(visit_id):
             "error.html", message="No BE or CV Rejections Were Found for This Visit"
         )
 
-    policy, detail, available_levels = get_policy_details(df)
+    try:
+        policy, detail, available_levels = get_policy_details(df)
+    except ServerSelectionTimeoutError:
+        # MongoDB is unreachable; show a friendly error page instead of a 500
+        return render_template(
+            "error.html",
+            message=(
+                "Cannot reach the MongoDB server at the configured host:27017. "
+                "Please check the MongoDB server, its bindIp and firewall rules."
+            ),
+        )
     if detail is None:
         return render_template(
             "error.html",
@@ -158,4 +168,4 @@ def chat(visit_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=2199, debug=True)

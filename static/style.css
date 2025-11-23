@@ -1,11 +1,41 @@
+:root {
+  --cream: #f8f5f2;
+  --dark-brown: #7c4c24;
+  --medium-brown: #B87c4c;
+  --light-brown: #EBD9D1;
+  --warm-brown: #A36A40;
+}
+
 body {
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: var(--cream);
 }
 
 header {
-  background: linear-gradient(90deg, #007bff, #0056b3);
+  background: linear-gradient(135deg, var(--dark-brown) 0%, var(--warm-brown) 100%);
 }
 
 .card {
   border-radius: 15px;
+  border: 1px solid var(--light-brown);
+}
+
+/* Floating Chat Button with new colors */
+.floating-chat-btn {
+  background: linear-gradient(135deg, var(--medium-brown) 0%, var(--warm-brown) 100%);
+  box-shadow: 0 4px 20px rgba(184, 124, 76, 0.4);
+}
+
+.floating-chat-btn:hover {
+  background: linear-gradient(135deg, var(--warm-brown) 0%, var(--medium-brown) 100%);
+  box-shadow: 0 6px 30px rgba(184, 124, 76, 0.5);
+}
+
+/* Message styling with new colors */
+.message-user {
+  background: linear-gradient(135deg, var(--dark-brown) 0%, var(--warm-brown) 100%);
+}
+
+.message-assistant {
+  border: 1px solid var(--light-brown);
 }

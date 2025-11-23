@@ -10,7 +10,7 @@ _ = load_dotenv()
 
 
 class ExtractAgent:
-    def __init__(self, name: str, schema: str, prompt: Optional[str] = None):
+    def __init__(self, name: str, schema: Optional[str] = None, prompt: Optional[str] = None):
         """
         Generic base class.
 
@@ -22,18 +22,20 @@ class ExtractAgent:
         agents = [agent.name for agent in extractor.list_agents()]
 
         if name in agents:
-            print("Agent already exists")
+            print("Loading existing agent.")
             self.agent = extractor.get_agent(name=name)
-        else:
+        elif name not in agents and schema is not None:
             with open(schema, "r") as file:
                 schema = json.load(file)
             config = ExtractConfig(
                 system_prompt=prompt,
             )
-            print("Creating new agent")
+            print("Creating new agent.")
             self.agent = extractor.create_agent(
                 name=name, data_schema=schema, config=config
             )
+        elif name not in agents and schema is None:
+            print("No schema found, try again.")
 
     def extract_file(self, file_path):
         return self.agent.extract(file_path)

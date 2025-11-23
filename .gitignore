@@ -179,7 +179,7 @@ cython_debug/
 *.xlsx
 *.xls
 *.parquet
-*.json
+passcode.json
 testing.py
 .vscode/
 .scannerwork

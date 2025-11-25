@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session , render_template_string
 from pymongo.errors import ServerSelectionTimeoutError
 import pandas as pd
-from resubmission.const import INDEX
-# from resubmission.models import Policy
+from resubmission.const import INDEX, ERROR
 from resubmission.utils import (
     get_visits_by_date,
     get_visit_data,
@@ -84,7 +83,7 @@ def display_policy_details(visit_id):
         """, data=data)
     if df is None:
         return render_template(
-            "error.html", message="No BE or CV Rejections Were Found for This Visit"
+            ERROR, message="No BE or CV Rejections Were Found for This Visit"
         )
 
     try:
@@ -92,15 +91,20 @@ def display_policy_details(visit_id):
     except ServerSelectionTimeoutError:
         # MongoDB is unreachable; show a friendly error page instead of a 500
         return render_template(
-            "error.html",
+            ERROR,
             message=(
                 "Cannot reach the MongoDB server at the configured host:27017. "
                 "Please check the MongoDB server, its bindIp and firewall rules."
             ),
         )
+    if policy is None:
+        return render_template(
+            ERROR,
+            message=f"No information found for policy {df["ContractorClientPolicyNumber"].iloc[0]} {df["ContractorClientEnName"].iloc[0]}.",
+        )
     if detail is None:
         return render_template(
-            "error.html",
+            ERROR,
             message=f"No information found for class {df['Contract'].iloc[0]}.",
             available_levels=available_levels,
         )

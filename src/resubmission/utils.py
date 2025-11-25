@@ -40,14 +40,15 @@ def get_visits_by_date(start_date, end_date):
 
 
 def get_policy_details(df):
-    # try to match policy number +1 and without 1, to make up for wrong policy number setup in dotcare database
-    policy = Policy.objects(
-        policy_number=df["ContractorClientPolicyNumber"].iloc[0]
-    ).first()
+    # not exact matching to avoid the problem of wrong policy number setup in dotcare database
+    # policy = Policy.objects(policy_number__icontains=df["ContractorClientPolicyNumber"].iloc[0]).first()
+    policy_numbers = list(Policy.objects().only("policy_number").scalar("policy_number"))
+    for p in policy_numbers:
+        if df["ContractorClientPolicyNumber"].iloc[0] in p:
+            policy = Policy.objects(policy_number=p).first()
+            break
     if not policy:
-        policy = Policy.objects(
-            policy_number=df["ContractorClientPolicyNumber2"].iloc[0]
-        ).first()
+        return None, None, None
 
     # matching the contract from dotcare db with contracts in policy
     vip_level = normalize_text(df["Contract"].iloc[0])

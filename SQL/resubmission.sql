@@ -13,7 +13,6 @@ SELECT
 	   VC.EnName AS Med_Dept,
 	   V.MainSpecialityEnName AS Specialty_Name,
 	   CAST(VFI.ContractorClientPolicyNumber AS NVARCHAR(20)) AS ContractorClientPolicyNumber,
-	   CAST(VFI.ContractorClientPolicyNumber+'1' AS NVARCHAR(20)) AS ContractorClientPolicyNumber2,
 	   VFI.ContractorClientEnName,
         CASE  
             WHEN VFI.ContractEnName LIKE '%OPD%' OR VFI.ContractEnName LIKE '%IPD%'

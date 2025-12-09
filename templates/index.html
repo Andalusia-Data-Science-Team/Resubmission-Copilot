@@ -6,47 +6,44 @@
   <div class="card-body p-4">
     <h5 class="fw-bold fs-5 mb-4">🔍 Search for Visits</h5>
     
-    <!-- Date Range Form -->
-    <form method="post" id="date-form">
-      <div class="row g-3 mb-3">
-        <div class="col-md-5">
-          <label for="start_date" class="form-label fw-semibold">Start Date</label>
-          <input type="date" name="start_date" id="start_date" class="form-control form-control-lg" 
-                 value="{{ start_date or '' }}" required>
-        </div>
-        <div class="col-md-5">
-          <label for="end_date" class="form-label fw-semibold">End Date</label>
-          <input type="date" name="end_date" id="end_date" class="form-control form-control-lg" 
-                 value="{{ end_date or '' }}" required>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-          <button type="submit" class="btn btn-primary btn-lg w-100">
-            <i class="bi bi-search"></i> Search
-          </button>
-        </div>
-      </div>
-      <small class="form-text text-muted">Select a date range to find available visits</small>
-    </form>
+   
     
     <!-- Visit ID Dropdown (shown after date search) -->
-    {% if show_dropdown and visit_ids %}
-    <hr class="my-4">
-    <form method="post" action="{{ url_for('home') }}" id="visit-form">
-      <label for="visit_id" class="form-label fw-semibold">Select Visit ID</label>
-      <div class="input-group input-group-lg">
-        <select name="visit_id" id="visit_id" class="form-select" required>
-          <option value="" {% if not selected_visit %}selected{% endif %} disabled>Choose a visit ID...</option>
-          {% for vid in visit_ids %}
-          <option value="{{ vid }}" {% if selected_visit and vid|string == selected_visit|string %}selected{% endif %}>{{ vid }}</option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn btn-success px-4">
-          <i class="bi bi-arrow-right-circle"></i> View Details
-        </button>
-      </div>
-      <small class="form-text text-muted mt-2 d-block">Found {{ visit_ids|length }} visit(s)</small>
-    </form>
-    {% endif %}
+  <hr class="my-4">
+<form method="post" action="{{ url_for('home') }}" id="visit-form">
+  <label for="visit_id" class="form-label fw-semibold">Select Visit ID</label>
+
+  <div class="input-group input-group-lg">
+
+    <!-- Input with datalist (searchable) -->
+    <input
+      list="visit_ids_list"
+      name="visit_id"
+      id="visit_id"
+      class="form-control"
+      placeholder="Choose a visit ID..."
+      required
+      value="{{ selected_visit if selected_visit else '' }}"
+    >
+
+    <!-- The searchable dropdown options -->
+    <datalist id="visit_ids_list">
+      {% for vid in visit_ids %}
+      <option value="{{ vid }}"></option>
+      {% endfor %}
+    </datalist>
+
+    <button type="submit" class="btn btn-success px-4">
+      <i class="bi bi-arrow-right-circle"></i> View Details
+    </button>
+
+  </div>
+
+  <small class="form-text text-muted mt-2 d-block">
+    Found {{ visit_ids|length }} visit(s)
+  </small>
+</form>
+
   </div>
 </div>
 

@@ -10,7 +10,9 @@ _ = load_dotenv()
 
 
 class ExtractAgent:
-    def __init__(self, name: str, schema: Optional[str] = None, prompt: Optional[str] = None):
+    def __init__(
+        self, name: str, schema: Optional[str] = None, prompt: Optional[str] = None
+    ):
         """
         Generic base class.
 

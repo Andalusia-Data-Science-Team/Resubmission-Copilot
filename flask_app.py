@@ -1,68 +1,56 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session , render_template_string
-from pymongo.errors import ServerSelectionTimeoutError
-import pandas as pd
-from resubmission.const import INDEX, ERROR
-from resubmission.utils import (
-    get_visits_by_date,
-    get_visit_data,
-    get_policy_details,
-    llm_response,
-    generate_justification)
 import json
-from flask_session import Session
+import os
 from datetime import timedelta
 from io import StringIO
+import logging
+
+import pandas as pd
+from dotenv import load_dotenv
+from flask import (Flask, jsonify, redirect, render_template,
+                   render_template_string, request, session, url_for)
+from pymongo.errors import ServerSelectionTimeoutError
+
+from flask_session import Session  # type: ignore
+from src.resubmission.chatbot import get_agent_response
+from src.resubmission.const import ERROR, INDEX
+from src.resubmission.utils import (get_policy_details, get_visit_data,
+                                    get_visits_by_date)
+
+load_dotenv()
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+file_handler = logging.FileHandler("app.log", mode="a")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 app = Flask(__name__)
-app.config['SESSION_TYPE'] = 'filesystem'  # or 'redis'
-app.permanent_session_lifetime = timedelta(hours=2)
+app.config["SESSION_TYPE"] = "filesystem"
+app.permanent_session_lifetime = timedelta(hours=1)
 Session(app)
-app.secret_key = "my-secret-key"
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    visit_ids = []
-    show_dropdown = False
-    start_date = None
-    end_date = None
+    visit_ids = get_visits_by_date()
 
     if request.method == "POST":
-        start_date = request.form.get("start_date")
-        end_date = request.form.get("end_date")
+
         visit_id = request.form.get("visit_id")
-
-        # Date search takes priority (if start_date exists, it's the date form)
-        if start_date and end_date:
-            visit_ids = get_visits_by_date(start_date, end_date)
-
-            if visit_ids is not None and not visit_ids.empty:
-                show_dropdown = True
-                visit_ids = visit_ids.tolist()
-
-                # Store in session for persistence
-                session["last_search"] = {
-                    "start_date": start_date,
-                    "end_date": end_date,
-                    "visit_ids": visit_ids,
-                }
-            else:
-                return render_template(
-                    INDEX,
-                    error_message=f"No Bupa visits were found between {start_date} and {end_date}. Please try different dates.",
-                    error_type="warning",
-                )
-
-        # Visit selection (after date search was done)
-        elif visit_id:
+        if visit_id:
             return redirect(url_for("display_policy_details", visit_id=visit_id))
+        else:
+            return render_template(
+                INDEX,
+                error_message="No Bupa visit id. Please check db connection.",
+                error_type="warning",
+            )
 
     return render_template(
         INDEX,
         visit_ids=visit_ids,
-        show_dropdown=show_dropdown,
-        start_date=start_date,
-        end_date=end_date,
     )
 
 
@@ -70,24 +58,30 @@ def home():
 def display_policy_details(visit_id):
     df = get_visit_data(visit_id)
     if request.method == "POST":
-        data = {"start_date": request.form.get("start_date"), "end_date": request.form.get("end_date")}
+        data = {
+            "start_date": request.form.get("start_date"),
+            "end_date": request.form.get("end_date"),
+        }
 
         # Render a hidden form that auto-submits as POST to "/"
-        return render_template_string("""
+        return render_template_string(
+            """
             <form id="redirForm" method="POST" action="{{ url_for('home') }}">
                 {% for key, val in data.items() %}
                     <input type="hidden" name="{{ key }}" value="{{ val }}">
                 {% endfor %}
             </form>
             <script>document.getElementById('redirForm').submit();</script>
-        """, data=data)
+        """,
+            data=data,
+        )
     if df is None:
         return render_template(
             ERROR, message="No BE or CV Rejections Were Found for This Visit"
         )
 
     try:
-        policy, detail, available_levels = get_policy_details(df)
+        policy, detail, available_levels = get_policy_details(df, logger)
     except ServerSelectionTimeoutError:
         # MongoDB is unreachable; show a friendly error page instead of a 500
         return render_template(
@@ -140,11 +134,13 @@ def display_policy_details(visit_id):
 @app.route("/chat/<visit_id>", methods=["GET", "POST"])
 def chat(visit_id):
     cached_data = session.get(f"visit_data_{visit_id}")
-    df = pd.read_json(StringIO(cached_data["df"]))
-    detail = json.loads(cached_data["detail"])
+    if cached_data:
+        df = pd.read_json(StringIO(cached_data["df"]))
+        detail = json.loads(cached_data["detail"])
 
     # Handle POST requests (chat messages or justification)
     if request.method == "POST":
+        thread_id = str(getattr(session, "sid", None))
         # Case 1: Chat message (form submission)
         if request.content_type == "application/x-www-form-urlencoded":
             user_input = request.form.get("message")
@@ -154,13 +150,15 @@ def chat(visit_id):
                 .to_dict()
             ) + str(df[["Service_Name", "Price"]].to_dict(orient="records"))
 
-            assistant_reply = llm_response(str(detail), visit_info, user_input)
+            assistant_reply = get_agent_response(
+                user_input, thread_id, str(detail), visit_info
+            )
             return jsonify({"response": assistant_reply})
 
         # Case 2: Generate Justification (button click)
         elif request.content_type == "application/json":
             data = request.get_json()
-            justification_text = generate_justification(data, str(detail))
+            justification_text = get_agent_response(None, thread_id, str(detail), data)
             return jsonify({"justification": justification_text})
 
     # GET request — render the chat page
@@ -172,4 +170,4 @@ def chat(visit_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=2199, debug=True)
+    app.run(host="0.0.0.0", port=2199, debug=True)

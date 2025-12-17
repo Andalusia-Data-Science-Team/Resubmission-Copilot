@@ -1,23 +1,18 @@
+import json
 import re
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime
+from pathlib import Path
+
 import pandas as pd
 from dotenv import load_dotenv
-from langchain_fireworks import ChatFireworks
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.chains import ConversationChain
-from src.resubmission.models import Policy, CoverageDetail
-from src.resubmission.prompt import chatbot_prompt, justification_prompt
-import urllib.request
-import urllib.parse
-import urllib.error
 from sqlalchemy import create_engine
-import time
-from typing import Dict
-from pathlib import Path
-import json
-from datetime import datetime
 
-memory = ConversationBufferWindowMemory(k=6, return_messages=True)
+from src.resubmission.models import CoverageDetail, Policy
+
 sf = pd.read_csv(Path("Data") / "sfda_list.csv")
 
 with open("passcode.json", "r") as file:
@@ -34,42 +29,95 @@ with open(sql_path / "get_visits.sql", "r") as file:
 _ = load_dotenv()
 
 
-def get_visits_by_date(start_date, end_date):
-    df = read_data(visits_query, read_passcode, params=(start_date, end_date))
-    return df['VisitID']
+def get_visits_by_date():
+    df = read_data(visits_query, read_passcode, params=None)
+    return df["VisitID"]
 
 
-def get_policy_details(df):
-    # not exact matching to avoid the problem of wrong policy number setup in dotcare database
-    # policy = Policy.objects(policy_number__icontains=df["ContractorClientPolicyNumber"].iloc[0]).first()
-    policy_numbers = list(Policy.objects().only("policy_number").scalar("policy_number"))
-    for p in policy_numbers:
-        if df["ContractorClientPolicyNumber"].iloc[0] in p:
-            policy = Policy.objects(policy_number=p).first()
-            break
+def get_policy_details(df, logger):
+    """
+    Retrieves policy and coverage details by matching policy number and VIP level.
+
+    Args:
+        df: DataFrame containing 'ContractorClientPolicyNumber' and 'Contract' columns
+
+    Returns:
+        tuple: (policy, detail_dict, available_levels)
+            - policy: Policy object or None
+            - detail_dict: Coverage detail dictionary or None
+            - available_levels: List of available VIP levels (only when no match found) or None
+    """
+    policy_number_input = df["ContractorClientPolicyNumber"].iloc[0]
+    vip_level_input = normalize_text(df["Contract"].iloc[0])
+
+    # Find matching policy (handles suffix variations)
+    policy = _find_policy_by_number(policy_number_input)
     if not policy:
+        logger.info("No policy found")
         return None, None, None
 
-    # matching the contract from dotcare db with contracts in policy
-    vip_level = normalize_text(df["Contract"].iloc[0])
-    selected = [
-        c for c in policy.coverage_details if normalize_text(c.vip_level) == vip_level
+    # Get coverage details for the matching VIP level
+    detail, available_levels = _match_coverage_detail(policy, vip_level_input)
+
+    return policy, detail, available_levels
+
+
+def _find_policy_by_number(policy_number_input):
+    """
+    Finds a policy by matching policy number (handles suffix variations).
+    Args:
+        policy_number_input: Policy number from input data
+    Returns:
+        Policy object or None
+    """
+    policy_numbers = list(Policy.objects().only("policy_number").scalar("policy_number"))
+
+    for policy_number in policy_numbers:
+        # Check if input is substring of DB policy number (handles missing suffixes)
+        if policy_number_input in policy_number:
+            return Policy.objects(policy_number=policy_number).first()
+
+    return None
+
+
+def _match_coverage_detail(policy, vip_level_input):
+    """
+    Matches coverage detail by VIP level from policy.
+
+    Args:
+        policy: Policy object
+        vip_level_input: Normalized VIP level from input
+
+    Returns:
+        tuple: (detail_dict, available_levels)
+            - detail_dict: Matched coverage detail as sorted dict, or None
+            - available_levels: List of available levels (only if no match), or None
+    """
+    coverage_details = policy.coverage_details
+
+    # If only one coverage exists, return it directly
+    if len(coverage_details) == 1:
+        detail = coverage_details[0].to_mongo().to_dict()
+        return dict(sorted(detail.items())), None
+
+    # Try to match by VIP level
+    matching_coverages = [
+        c for c in coverage_details
+        if normalize_text(c.vip_level) == vip_level_input
     ]
 
-    available_levels = None
-    detail = None
-    if not selected:  # if no match was found in contracts
-        available_levels = [c.vip_level for c in policy.coverage_details]
-        # returns available_levels to include in the error msg
-    else:
-        detail = selected[0].to_mongo().to_dict()
-        detail = dict(sorted(detail.items()))
-    return policy, detail, available_levels
+    if matching_coverages:
+        detail = matching_coverages[0].to_mongo().to_dict()
+        return dict(sorted(detail.items())), None
+
+    # No match found - return available levels for error message
+    available_levels = [c.vip_level for c in coverage_details]
+    return None, available_levels
 
 
 def get_visit_data(visit_id):
     """Fetch and process visit data by selected visit id"""
-    df = read_data(query, read_passcode, params=(visit_id,))
+    df = read_data(query, read_passcode, (visit_id,))
     df["Contract"] = (
         df["Contract"]
         .fillna("")  # ensure no NaN
@@ -98,38 +146,6 @@ def extract_drug_code(text):
     pattern = r"\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){0,2}"
     codes = re.findall(pattern, text)
     return set(codes)
-
-
-def llm_response(
-    policy,
-    visit_info,
-    user_input,
-    model="accounts/fireworks/models/gpt-oss-120b",
-):
-    llm = ChatFireworks(model=model, temperature=0.2, model_kwargs={"stream": True}, max_tokens=10000)
-    conversation = ConversationChain(
-        llm=llm,
-        memory=memory,
-    )
-    conversation.memory.chat_memory.add_message(SystemMessage(content=chatbot_prompt))
-    conversation.memory.chat_memory.add_message(SystemMessage(content=policy))
-    conversation.memory.chat_memory.add_message(SystemMessage(content=(
-        "For your context, these are the services provided during the visit. "
-        "Reference them if needed."
-    )))
-    conversation.memory.chat_memory.add_message(HumanMessage(content=visit_info))
-
-    stream = llm.stream(
-        conversation.memory.chat_memory.messages
-        + [HumanMessage(content=user_input)]
-    )
-
-    full_response = ""
-    for chunk in stream:
-        if hasattr(chunk, "content") and chunk.content:
-            full_response += chunk.content
-
-    return full_response
 
 
 def processing_thoughts(text):
@@ -193,58 +209,6 @@ def read_data(query, passcode, params):
         return df
 
 
-def update_table(
-    passcode: Dict[str, str],
-    table_name: str,
-    df: pd.DataFrame,
-    logger,
-    retries=28,
-    delay=500,
-):
-    """
-    Updates a database table with the given DataFrame. Retries on failure.
-
-    Parameters:
-    - table_name: Name of the table to update.
-    - df: DataFrame to update the table.
-    - retries: Number of retry attempts.
-    - delay: Delay in seconds between retries.
-    """
-    try:
-        engine = get_conn_engine(passcode, logger)
-        # Create a copy of the DataFrame to avoid modifying the original
-        df_clean = df.copy()
-
-        attempt = 0
-        while attempt < retries:
-            try:
-                logger.debug(f"Update attempt {attempt+1}/{retries}")
-                logger.debug("Connection established, beginning data transfer")
-                df_clean.to_sql(
-                    name=f"{table_name}",
-                    con=engine,
-                    index=False,
-                    if_exists="append",
-                    chunksize=1000,
-                    schema="dbo",
-                )
-                logger.info(f"Successfully updated '{table_name}' table")
-                return  # Exit the function if successful
-            except Exception as e:
-                attempt += 1
-                logger.error(f"Attempt {attempt} failed: {str(e)}")
-                if attempt < retries:
-                    logger.info(f"Retrying in {delay} seconds...")
-                    time.sleep(delay)
-                else:
-                    failure_msg = "All retries failed. Please check the error and try again later."
-                    logger.error(failure_msg)
-                    raise  # Re-raise the exception after all retries fail
-    except Exception as e:
-        logger.exception(f"Critical error in updating table {table_name}: {e}")
-        raise
-
-
 def list_files(folder_path: str):
     """
     Return a list of file names in the given folder.
@@ -295,7 +259,11 @@ def insert(data_source):
             if "effective_from" in data
             else None
         ),
-        effective_to=datetime.fromisoformat(data.get("effective_to")) if data.get("effective_to") not in (None, "") else None,
+        effective_to=(
+            datetime.fromisoformat(data.get("effective_to"))
+            if data.get("effective_to") not in (None, "")
+            else None
+        ),
         coverage_details=coverage_list,
     )
 
@@ -328,14 +296,3 @@ def normalize_text(text: str) -> str:
     if not isinstance(text, str):
         return text  # handle non-string values safely
     return text.replace(" ", "").replace("–", "").replace("-", "").lower()
-
-
-def generate_justification(claim, policy, model="accounts/fireworks/models/deepseek-v3p1"):
-    chat_model = ChatFireworks(model=model, temperature=0.2, max_tokens=5000)
-    chat_history = [
-        SystemMessage(content=justification_prompt),
-        HumanMessage(content=policy),
-        HumanMessage(content=str(claim)),
-    ]
-    response = chat_model.invoke(chat_history).content
-    return response

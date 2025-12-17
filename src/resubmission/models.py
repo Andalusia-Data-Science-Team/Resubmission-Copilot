@@ -1,11 +1,6 @@
-from mongoengine import (
-    connect,
-    Document,
-    EmbeddedDocument,
-    StringField,
-    DateField,
-    EmbeddedDocumentListField,
-)
+from mongoengine import (DateField, Document, EmbeddedDocument,
+                         EmbeddedDocumentListField, StringField, connect)
+
 from src.resubmission.config_handler import config
 
 # 1. Connect to MongoDB

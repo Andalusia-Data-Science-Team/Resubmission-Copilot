@@ -1,16 +1,20 @@
-from llama_cloud_services import LlamaExtract
-from llama_cloud import ExtractConfig
-from src.resubmission.utils import list_files
-from dotenv import load_dotenv
-from typing import Optional
-import json
 import asyncio
+import json
+from typing import Optional
+
+from dotenv import load_dotenv
+from llama_cloud import ExtractConfig
+from llama_cloud_services import LlamaExtract
+
+from src.resubmission.utils import list_files
 
 _ = load_dotenv()
 
 
 class ExtractAgent:
-    def __init__(self, name: str, schema: Optional[str] = None, prompt: Optional[str] = None):
+    def __init__(
+        self, name: str, schema: Optional[str] = None, prompt: Optional[str] = None
+    ):
         """
         Generic base class.
 

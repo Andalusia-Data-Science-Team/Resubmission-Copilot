@@ -38,6 +38,7 @@ def home():
 
     if request.method == "POST":
 
+
         visit_id = request.form.get("visit_id")
         if visit_id:
             return redirect(url_for("display_policy_details", visit_id=visit_id))
@@ -144,6 +145,8 @@ def chat(visit_id):
         # Case 1: Chat message (form submission)
         if request.content_type == "application/x-www-form-urlencoded":
             user_input = request.form.get("message")
+            thread_id = str(getattr(session, "sid", None))
+
             visit_info = str(
                 df[["Med_Dept", "Specialty_Name", "Diagnose_Name", "ICD10 Code"]]
                 .iloc[0]

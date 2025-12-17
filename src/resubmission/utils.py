@@ -32,9 +32,6 @@ _ = load_dotenv()
 def get_visits_by_date():
     df = read_data(visits_query, read_passcode, params=None)
     return df["VisitID"]
-def get_visits_by_date():
-    df = read_data(visits_query, read_passcode, params=None)
-    return df["VisitID"]
 
 
 def get_policy_details(df, logger):
@@ -120,7 +117,6 @@ def _match_coverage_detail(policy, vip_level_input):
 
 def get_visit_data(visit_id):
     """Fetch and process visit data by selected visit id"""
-    df = read_data(query, read_passcode, (visit_id,))
     df = read_data(query, read_passcode, (visit_id,))
     df["Contract"] = (
         df["Contract"]
@@ -261,11 +257,6 @@ def insert(data_source):
         effective_from=(
             datetime.fromisoformat(data["effective_from"])
             if "effective_from" in data
-            else None
-        ),
-        effective_to=(
-            datetime.fromisoformat(data.get("effective_to"))
-            if data.get("effective_to") not in (None, "")
             else None
         ),
         effective_to=(

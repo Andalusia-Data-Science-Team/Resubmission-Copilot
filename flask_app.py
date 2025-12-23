@@ -1,26 +1,37 @@
 import json
+import logging
 import os
 from datetime import timedelta
 from io import StringIO
-import logging
 
 import pandas as pd
 from dotenv import load_dotenv
-from flask import (Flask, jsonify, redirect, render_template,
-                   render_template_string, request, session, url_for)
+from flask import (
+    Flask,
+    jsonify,
+    redirect,
+    render_template,
+    render_template_string,
+    request,
+    session,
+    url_for,
+)
 from pymongo.errors import ServerSelectionTimeoutError
 
 from flask_session import Session  # type: ignore
 from src.resubmission.chatbot import get_agent_response
 from src.resubmission.const import ERROR, INDEX
-from src.resubmission.utils import (get_policy_details, get_visit_data,
-                                    get_visits_by_date)
+from src.resubmission.utils import (
+    get_policy_details,
+    get_visit_data,
+    get_visits_by_date,
+)
 
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 file_handler = logging.FileHandler("app.log", mode="a")
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
@@ -37,7 +48,6 @@ def home():
     visit_ids = get_visits_by_date()
 
     if request.method == "POST":
-
 
         visit_id = request.form.get("visit_id")
         if visit_id:
@@ -57,7 +67,7 @@ def home():
 
 @app.route("/visit/<visit_id>", methods=["GET", "POST"])
 def display_policy_details(visit_id):
-    df = get_visit_data(visit_id)
+    df = get_visit_data(visit_id, logger)
     if request.method == "POST":
         data = {
             "start_date": request.form.get("start_date"),
@@ -142,16 +152,14 @@ def chat(visit_id):
     # Handle POST requests (chat messages or justification)
     if request.method == "POST":
         thread_id = str(getattr(session, "sid", None))
+        visit_info = str(
+            df[["Med_Dept", "Specialty_Name", "Diagnose_Name", "ICD10 Code"]]
+            .iloc[0]
+            .to_dict()
+        ) + str(df[["Service_Name", "Price"]].to_dict(orient="records"))
         # Case 1: Chat message (form submission)
         if request.content_type == "application/x-www-form-urlencoded":
             user_input = request.form.get("message")
-            thread_id = str(getattr(session, "sid", None))
-
-            visit_info = str(
-                df[["Med_Dept", "Specialty_Name", "Diagnose_Name", "ICD10 Code"]]
-                .iloc[0]
-                .to_dict()
-            ) + str(df[["Service_Name", "Price"]].to_dict(orient="records"))
 
             assistant_reply = get_agent_response(
                 user_input, thread_id, str(detail), visit_info
@@ -160,8 +168,10 @@ def chat(visit_id):
 
         # Case 2: Generate Justification (button click)
         elif request.content_type == "application/json":
-            data = request.get_json()
-            justification_text = get_agent_response(None, thread_id, str(detail), data)
+            service = request.get_json()
+            justification_text = get_agent_response(
+                None, thread_id, str(detail), visit_info, service
+            )
             return jsonify({"justification": justification_text})
 
     # GET request — render the chat page

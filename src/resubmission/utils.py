@@ -70,7 +70,9 @@ def _find_policy_by_number(policy_number_input):
     Returns:
         Policy object or None
     """
-    policy_numbers = list(Policy.objects().only("policy_number").scalar("policy_number"))
+    policy_numbers = list(
+        Policy.objects().only("policy_number").scalar("policy_number")
+    )
 
     for policy_number in policy_numbers:
         # Check if input is substring of DB policy number (handles missing suffixes)
@@ -102,8 +104,7 @@ def _match_coverage_detail(policy, vip_level_input):
 
     # Try to match by VIP level
     matching_coverages = [
-        c for c in coverage_details
-        if normalize_text(c.vip_level) == vip_level_input
+        c for c in coverage_details if normalize_text(c.vip_level) == vip_level_input
     ]
 
     if matching_coverages:
@@ -115,9 +116,10 @@ def _match_coverage_detail(policy, vip_level_input):
     return None, available_levels
 
 
-def get_visit_data(visit_id):
+def get_visit_data(visit_id, logger):
     """Fetch and process visit data by selected visit id"""
     df = read_data(query, read_passcode, (visit_id,))
+    logger.info(f"Fetched {len(df)} rows for visit {visit_id}")
     df["Contract"] = (
         df["Contract"]
         .fillna("")  # ensure no NaN

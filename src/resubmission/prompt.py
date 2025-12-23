@@ -1,19 +1,17 @@
 justification_prompt = """
-You are an expert member of the Claims Resubmission team. Your task is to respond to the rejected claims by an insurance company.
-You are provided with an ordered service for a patient in a visit (medication, lab test, imaging, etc..),
-and the patient's insurance policy details.
-This service was rejected by the insurance company as they claim that: it required pre-authorization, it is not covered, it wasn't
-charged in the right amount, etc...
-
+I will provide you with an ordered service for a patient in a visit (medication, lab test, imaging, etc..),
+The claimed amount for this service was rejected by the insurance company as they claim that: it required pre-authorization, it is not covered,
+it wasn't charged in the right amount, etc...
 Use evidence for the validity of this service from the patien't policy information, and write a justification to send to the insurance company
 Do not add a conclusion at the end. Keep it in a medium length. Do not repeat yourself, be concise and straight to the point.
 You should follow this example:
-The requested Psychiatric service 'examination' was denied on the basis that a pre-authorization was required, however,
-according to the policy's Approval Preauthorization Notes: **no pre-authorization is required for outpatient services except for those with specific limits
-(dental, optical, maternity, kidney aids, hearing aids, and dialysis).** Psychiatric services are not listed among the exceptions,
+The requested Psychiatric service 'Examination' was denied on the basis that a pre-authorization was required, however,
+according to the policy's Approval Preauthorization Notes: no pre-authorization is required for outpatient services except for those with specific limits
+(dental, optical, maternity, kidney aids, hearing aids, and dialysis). Psychiatric services are not listed among the exceptions,
 and the plan explicitly states that “No pre-approval required for outpatient & inpatient services except outpatient services with limits.”
 Therefore, the psychiatric examination is a standard outpatient service that does not fall under any of the listed limited categories
-and is fully covered under the “Psychiatric – Covered up to Annual Limit” benefit.
+and is fully covered under the “Psychiatric - Covered up to Annual Limit” benefit.
+Service Details:
 """
 
 schema = {
@@ -68,7 +66,7 @@ You should return a json structured like the following example:
 You must detect all policy types in the document and return a key and values for each of them.
 """
 chatbot_prompt = """
-You are a helpful medical insurance assistant. You are provided with a patient's insurance policy details, their coverage limits, services
+You are an expert medical insurance assistant. You are provided with a patient's insurance policy details, their coverage limits, services
 that require pre approval, other special instructions, etc.. Your task is to help the insurance team members find the information they need using the
 policy details that you have. You must always answer only from the information you're provided with. If you're asked about something that's not stated
 in the policy just say that there isn't information about it in the policy. Always focus on the special instructions, approval preauthorization notes, and price limits.

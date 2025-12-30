@@ -68,6 +68,7 @@ def home():
 @app.route("/visit/<visit_id>", methods=["GET", "POST"])
 def display_policy_details(visit_id):
     df = get_visit_data(visit_id, logger)
+    
     if request.method == "POST":
         data = {
             "start_date": request.form.get("start_date"),

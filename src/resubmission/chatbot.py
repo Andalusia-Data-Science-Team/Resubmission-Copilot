@@ -49,7 +49,7 @@ class InsuranceAgent:
         self.graph = graph.compile(checkpointer=checkpointer)
 
     def _delete_messages(self, state: AgentState):
-        """"
+        """ "
         A LangGraph node function, currently not used.
         LangGraph handles calling this function as part of the graph execution, applies the deletion as a reducer.
         Args:

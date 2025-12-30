@@ -68,6 +68,7 @@ def home():
 @app.route("/visit/<visit_id>", methods=["GET", "POST"])
 def display_policy_details(visit_id):
     df = get_visit_data(visit_id, logger)
+    
     if request.method == "POST":
         data = {
             "start_date": request.form.get("start_date"),
@@ -92,6 +93,9 @@ def display_policy_details(visit_id):
         )
 
     try:
+        selected_level = session.pop("tmp_level", None)
+        if selected_level:
+            df['Contract'] = selected_level
         policy, detail, available_levels = get_policy_details(df, logger)
     except ServerSelectionTimeoutError:
         # MongoDB is unreachable; show a friendly error page instead of a 500
@@ -112,8 +116,9 @@ def display_policy_details(visit_id):
             ERROR,
             message=f"No information found for class {df['Contract'].iloc[0]}.",
             available_levels=available_levels,
+            visit_id=visit_id,
         )
-
+    
     # Store data in session for the chat route
     session[f"visit_data_{visit_id}"] = {
         "df": df.to_json(),
@@ -141,6 +146,13 @@ def display_policy_details(visit_id):
         end_date=end_date,
     )
 
+@app.route("/select_level/<visit_id>", methods=["POST"])
+def select_level(visit_id):
+    # store selected level temporarily
+    session["tmp_level"] = request.form.get("selected_level")
+    
+    # redirect back to display_policy_details
+    return redirect(url_for("display_policy_details", visit_id=visit_id))
 
 @app.route("/chat/<visit_id>", methods=["GET", "POST"])
 def chat(visit_id):
@@ -183,4 +195,4 @@ def chat(visit_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=2199, debug=True)
+    app.run(host="0.0.0.0", port=2200, debug=True)

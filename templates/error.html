@@ -18,11 +18,19 @@
     <div class="alert alert-info mt-3" role="alert">
       <i class="bi bi-info-circle-fill me-2"></i>
       <strong>Available VIP Levels:</strong>
-      <div class="mt-2">
-        {% for level in available_levels %}
-          <span class="badge bg-primary me-2 mb-2">{{ level }}</span>
-        {% endfor %}
-      </div>
+    
+      <form action="{{ url_for('select_level', visit_id=visit_id) }}" method="POST">
+        <div class="mt-2">
+          {% for level in available_levels %}
+            <button type="submit" 
+                    name="selected_level" 
+                    value="{{ level }}" 
+                    class="btn btn-primary px-2 my-1">
+              {{ level }}
+            </button>
+          {% endfor %}
+        </div>
+      </form>
     </div>
     {% endif %}
     

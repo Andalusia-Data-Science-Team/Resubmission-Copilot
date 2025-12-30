@@ -118,8 +118,7 @@ def display_policy_details(visit_id):
             available_levels=available_levels,
             visit_id=visit_id,
         )
-    df['Contract'] = request.form.get('level', df['Contract'])
-
+    
     # Store data in session for the chat route
     session[f"visit_data_{visit_id}"] = {
         "df": df.to_json(),

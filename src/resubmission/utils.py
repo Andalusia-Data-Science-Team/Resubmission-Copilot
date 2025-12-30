@@ -30,6 +30,9 @@ _ = load_dotenv()
 
 
 def get_visits_by_date():
+    """"
+    Fetch all visit IDs for Bupa visits ordered by date from most to least recent.
+    These visit ids are displayed in the dropdown on the home page as a suggestion to choose from."""
     df = read_data(visits_query, read_passcode, params=None)
     return df["VisitID"]
 

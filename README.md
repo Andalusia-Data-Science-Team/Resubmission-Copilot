@@ -1,4 +1,4 @@
-# Resubmission Copilot
+# Resubmission Copilot - Policy Assist
 
 An intelligent AI-powered system for automating medical insurance claims resubmission processes. This application helps insurance teams quickly find policy details, understand coverage limits, and generate justifications for rejected claims.
 
@@ -8,20 +8,20 @@ An intelligent AI-powered system for automating medical insurance claims resubmi
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [API Reference](#api-reference)
-- [Database Schema](#database-schema)
-- [Development](#development)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#-architecture)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Usage](#-usage)
+- [Project Structure](#-project-structure)
+- [API Reference](#-api-reference)
+- [Database Schema](#-database-schema)
+- [Development](#-development)
+- [Troubleshooting](#-troubleshooting)
+- [Enhancements](#-enhancements)
+- [Contributing](#-contributing)
 
 ## 🎯 Overview
 
@@ -35,15 +35,13 @@ Resubmission Copilot streamlines the insurance claims resubmission workflow by:
 ## ✨ Features
 
 ### 🔍 Visit Management
-- Search visits by date range or visit ID
-- Filter for visits with specific rejection codes (BE-*, CV-*)
+- Search visits by visit ID, filtered with specific rejection codes (BE-*, CV-*)
 - Display comprehensive visit details including services, diagnoses, and pricing
 
 ### 📊 Policy Intelligence
-- Automatic policy matching based on policy number and VIP level
+- Automatic policy matching based on policy number and class
 - Detailed coverage breakdown by service type
 - SFDA (Saudi Food & Drug Authority) medication validation
-- Pre-authorization requirement detection
 
 ### 🤖 AI-Powered Assistance
 - **Conversational Interface**: Ask questions about coverage limits, pre-approval requirements, and policy details
@@ -51,11 +49,6 @@ Resubmission Copilot streamlines the insurance claims resubmission workflow by:
 - **Justification Generator**: Creates evidence-based justifications citing specific policy clauses
 - **Memory Management**: Maintains conversation history with smart context window management
 
-### 💡 User Experience
-- Clean, modern UI with responsive design
-- Real-time chat interface with typing indicators
-- One-click justification generation from service table
-- Color-coded status indicators and badges
 
 ## 🏗️ Architecture
 
@@ -79,15 +72,15 @@ Resubmission Copilot streamlines the insurance claims resubmission workflow by:
               │
          ┌────▼─────┐
          │Fireworks │
-         │   LLM    │
+         │   API    │
          └──────────┘
 ```
 
 ### Components
 
 - **Flask Backend**: Handles routing, session management, and business logic
-- **SQL Server**: Stores visit data, claims, and financial information
-- **MongoDB**: Stores structured insurance policy documents
+- **SQL Server**: Stores patient, visit, and billing data
+- **MongoDB**: Stores structured insurance policy data
 - **LangGraph Agent**: Manages conversational AI with memory and context
 - **Fireworks LLM**: Powers the chatbot with GPT-OSS-120B model
 - **LlamaExtract**: Extracts structured data from policy documents
@@ -96,14 +89,8 @@ Resubmission Copilot streamlines the insurance claims resubmission workflow by:
 
 ### Software Requirements
 - Python 3.10 or higher
-- SQL Server (with ODBC driver)
 - MongoDB 4.4+
 - ODBC Driver 17 for SQL Server
-
-### System Requirements
-- 4GB RAM minimum (8GB recommended)
-- 2GB free disk space
-- Network access to database servers
 
 ## 🚀 Installation
 
@@ -131,27 +118,6 @@ source venv/bin/activate
 ```bash
 pip install -e .
 
-# For development
-pip install -e ".[testing]"
-```
-
-### 4. Install ODBC Driver
-
-**Windows**: Download and install [Microsoft ODBC Driver 17](https://docs.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server)
-
-**Linux (Ubuntu/Debian)**:
-```bash
-curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
-apt-get update
-ACCEPT_EULA=Y apt-get install -y msodbcsql17
-```
-
-**macOS**:
-```bash
-brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
-brew update
-HOMEBREW_NO_ENV_FILTERING=1 ACCEPT_EULA=Y brew install msodbcsql17
 ```
 
 ## ⚙️ Configuration
@@ -173,7 +139,7 @@ LLAMA_CLOUD_API_KEY=your-llamacloud-api-key
 
 ### 2. Database Configuration
 
-Create `passcode.json` in the project root:
+Create `passcode.json` in the project root, structured like the following example:
 
 ```json
 {
@@ -193,8 +159,8 @@ Create `database.ini` for MongoDB:
 
 ```ini
 [mongodb]
-db=insurance_policies
-host=localhost
+db=insurance_db
+host=mongo-server-machine-ip
 port=27017
 username=your-mongo-username
 password=your-mongo-password
@@ -232,12 +198,12 @@ The application will be available at `http://localhost:2199`
 #### 2. Review Policy & Visit Data
 - View patient information, services provided, and rejection reasons
 - Review matched insurance policy details and coverage limits
-- Check SFDA medication approval status
+- Check SFDA medication status
 
 #### 3. Use AI Assistant
-Two ways to access the AI assistant:
+Two ways to use the AI features:
 
-**A. Chat Interface** (Click "Ask Assistant" button):
+**A. Chatbot** (Click "Ask Assistant" button):
 - Ask questions about coverage: *"Is psychiatric examination covered?"*
 - Check pre-authorization: *"Does this service require pre-approval?"*
 - Verify limits: *"What's the annual limit for optical services?"*
@@ -247,24 +213,6 @@ Two ways to access the AI assistant:
 - Click "✨ Generate Justification"
 - AI creates a detailed justification citing relevant policy clauses
 
-#### 4. Copy & Submit
-- Copy generated justifications
-- Use them in your resubmission documentation
-- Submit to insurance company
-
-### Example Queries
-
-```
-User: "Is kidney transplant covered under this policy?"
-Assistant: "Yes, kidney transplant is covered with a limit of 250,000 SR 
-according to the policy's coverage details for VIP level."
-
-User: "Does the psychiatric examination require pre-authorization?"
-Assistant: "No, according to the policy's Approval Preauthorization Notes, 
-no pre-authorization is required for outpatient services except those with 
-specific limits (dental, optical, maternity, etc.). Psychiatric services 
-are not among the exceptions."
-```
 
 ## 📁 Project Structure
 
@@ -308,143 +256,15 @@ Resubmission-Copilot/
 └── README.md                       # This file
 ```
 
-## 🔌 API Reference
-
-### Routes
-
-#### `GET/POST /`
-**Home page** - Visit search and selection
-
-**POST Parameters**:
-- `visit_id` (string): Selected visit ID
-
-**Returns**: Renders `index.html`
-
----
-
-#### `GET/POST /visit/<visit_id>`
-**Policy details page** - Display visit data and matched policy
-
-**Returns**: Renders `index.html` with policy and visit data, or `error.html` if not found
-
----
-
-#### `GET/POST /chat/<visit_id>`
-**Chat interface** - AI assistant interaction
-
-**POST (Form)**: Send chat message
-- `message` (string): User's question
-- **Returns**: JSON `{"response": "assistant's reply"}`
-
-**POST (JSON)**: Generate justification
-- Body: Service details object
-- **Returns**: JSON `{"justification": "generated text"}`
-
----
-
-### Agent Functions
-
-```python
-def get_agent_response(
-    user_input: str,
-    thread_id: str,
-    policy: str = "",
-    visit_info: str = "",
-    service: dict = None
-) -> str
-```
-
-**Parameters**:
-- `user_input`: User's question (None for justification mode)
-- `thread_id`: Unique conversation identifier
-- `policy`: JSON string of policy details
-- `visit_info`: String containing visit context
-- `service`: Dictionary of service details for justification
-
-**Returns**: AI-generated response text
-
-## 🗄️ Database Schema
-
-### SQL Server Tables
-
-**VisitMgt.VisitFinincailInfo**
-```sql
-VisitID                         INT
-ContractorEnName                NVARCHAR(255)
-ContractorClientPolicyNumber    NVARCHAR(50)
-ContractorClientEnName          NVARCHAR(255)
-ContractEnName                  NVARCHAR(255)
-CreatedDate                     DATETIME
-```
-
-**Nphies.ClaimTransaction**
-```sql
-ID                  INT
-VisitId             INT
-StatementID         INT
-TransactionType     NVARCHAR(50)
-CreatedDate         DATETIME
-```
-
-**Nphies.ClaimItem**
-```sql
-ClaimTransactionID      INT
-NameEn                  NVARCHAR(255)
-ResponseReasonCode      NVARCHAR(50)
-ResponseReason          NVARCHAR(MAX)
-ResponseSubmitted       DECIMAL(18,2)
-ITEMID                  INT
-```
-
-### MongoDB Schema
-
-**Collection: Policy**
-```javascript
-{
-  policy_number: String (required),
-  company_name: String,
-  policy_holder: String,
-  effective_from: Date,
-  effective_to: Date,
-  coverage_details: [
-    {
-      vip_level: String,
-      overall_annual_limit: String,
-      inpatient_outpatient_treatment: String,
-      accommodation: String,
-      outpatient_deductible_mpn: String,
-      outpatient_deductible_hospitals: String,
-      outpatient_deductible_polyclinic: String,
-      branded_medication_deductible: String,
-      generic_medication_deductible: String,
-      network: String,
-      // ... 40+ coverage fields
-      special_instructions: String
-    }
-  ]
-}
-```
-
-See `schema.json` for complete field definitions.
 
 ## 🛠️ Development
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=src/resubmission
-
-# Watch mode (auto-rerun on changes)
-pytest-watcher
-```
 
 ### Code Quality
 
 ```bash
+# Sort imports
+isort src/ tests/
+
 # Format code
 black src/ tests/
 
@@ -453,55 +273,26 @@ flake8 src/ tests/
 
 # Type checking
 mypy src/
+
 ```
 
 ### Adding New Policies
 
-#### Option 1: Manual Entry
-```python
-from src.resubmission.utils import insert
-
-policy_data = {
-    "policy_number": "12345",
-    "company_name": "Example Corp",
-    "policy_holder": "John Doe",
-    "effective_from": "2025-01-01",
-    "effective_to": "2026-01-01",
-    "coverage_details": [
-        {
-            "vip_level": "VIP",
-            "overall_annual_limit": "1,000,000 SR",
-            # ... other fields
-        }
-    ]
-}
-
-insert(policy_data)
-```
-
-#### Option 2: Extract from PDF
+#### File/Batch Extraction from PDF Example Usage
 ```python
 from src.resubmission.extraction import ExtractAgent
 
-agent = ExtractAgent(
-    name="bupa_extractor",
-    schema="schema.json",
-    prompt="Your extraction prompt"
-)
+# Loading an existing agent
+agent = ExtractAgent('bupa')
 
+# Batch Extraction
+outputs = await agent.extract_batch("path/to/policy_data")
+for output in outputs:
+    insert(output.data)
+
+# File Extraction
 result = agent.extract_file("path/to/policy.pdf")
 insert(result.data)
-```
-
-### Environment Setup
-
-```bash
-# Development dependencies
-pip install -e ".[testing]"
-
-# Pre-commit hooks (recommended)
-pip install pre-commit
-pre-commit install
 ```
 
 ## 🐛 Troubleshooting
@@ -513,28 +304,35 @@ pre-commit install
 Error: Cannot reach the MongoDB server
 ```
 **Solution**: 
-- Check MongoDB is running: `sudo systemctl status mongod`
-- Verify `database.ini` credentials
-- Check firewall: `sudo ufw allow 27017`
-- Test connection: `mongo --host localhost --port 27017`
+- Check MongoDB container is running
+- Verify `database.ini` credentials are correct
+- Test connection
+
+```python
+from mongoengine import connect
+from src.resubmission.config_handler import config
+
+params = config(section="mongodb")
+connect(
+    db=params["db"],
+    host=params.get("host"),
+    port=int(params.get("port")),
+    username=params.get("username"),
+    password=params.get("password"),
+    authentication_source=params.get("authentication_source"),
+)
+```
 
 #### 2. **"SQL Server connection failed"**
 ```
-Error: [Microsoft][ODBC Driver 17 for SQL Server]Login timeout expired
+Errors: - Login timeout expired
+        - Login failed for user <user>
 ```
 **Solution**:
-- Verify SQL Server is accessible
-- Check `passcode.json` credentials
-- Test ODBC driver: `odbcinst -j`
-- Verify network connectivity
+- Make sure `passcode.json` credentials being used are correct
+- Kindly contact Data Engineering team / DBA if the issue persists
 
-#### 3. **"No Bupa visits found"**
-**Solution**:
-- Check date range in database
-- Verify `ContractorEnName = 'Bupa'` in SQL
-- Check rejection codes (BE-*, CV-*)
-
-#### 4. **"SFDA data missing"**
+#### 3. **"SFDA data missing"**
 ```
 KeyError: 'SFDAStatus'
 ```
@@ -543,30 +341,15 @@ KeyError: 'SFDAStatus'
 - Verify CSV has required columns
 - Check file encoding (UTF-8)
 
-#### 5. **"Policy not found for VIP level"**
-**Solution**:
-- Check available levels in error message
-- Verify policy number format (may include suffixes)
-- Use `normalize_text()` for comparison
-- Check MongoDB has policy data
-
-#### 6. **"Fireworks API error"**
+#### 4. **"Fireworks API error"**
 ```
 Error: Invalid API key
 ```
 **Solution**:
 - Verify `FIREWORKS_API_KEY` in `.env`
 - Check API quota/limits
-- Test with: `curl -H "Authorization: Bearer $FIREWORKS_API_KEY"`
 
 ### Debug Mode
-
-Enable detailed logging:
-
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-```
 
 Check application logs:
 ```bash
@@ -576,6 +359,7 @@ tail -f app.log
 ## 📚 Additional Resources
 
 - [Flask Documentation](https://flask.palletsprojects.com/)
+- [Llama Extract](https://developers.llamaindex.ai/python/cloud/llamaextract/getting_started/)
 - [LangGraph Guide](https://langchain-ai.github.io/langgraph/)
 - [MongoDB Documentation](https://docs.mongodb.com/)
 - [Fireworks AI API](https://docs.fireworks.ai/)
@@ -584,14 +368,12 @@ tail -f app.log
 
 We welcome contributions! Please follow these steps:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests (`pytest`)
-5. Format code (`black .`)
-6. Commit changes (`git commit -m 'Add amazing feature'`)
-7. Push to branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+1. Create a feature branch (`git checkout -b FEAT/amazing-feature`)
+2. Make your changes
+3. Format code using (`black .`) and sort the import using isort(`isort .`)
+4. Commit changes (`git commit -m 'Add amazing feature'`)
+5. Push to branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
 
 ### Coding Standards
 - Follow PEP 8 style guide
@@ -599,31 +381,15 @@ We welcome contributions! Please follow these steps:
 - Write tests for new features
 - Update README for significant changes
 
-## 📄 License
-
-This project is licensed under the MIT License. See `LICENSE` file for details.
-
 ## 👥 Authors
 
 **AI Team**
-- Email: nadeensokily@gmail.com
-
-## 🙏 Acknowledgments
-
-- Anthropic Claude for documentation assistance
-- Fireworks AI for LLM infrastructure
-- LlamaIndex for document extraction capabilities
-- The Flask and LangChain communities
-
-## 📞 Support
-
-For issues and questions:
-- Open an issue on GitHub
-- Email: nadeensokily@gmail.com
-- Check existing documentation and troubleshooting section
+- [Nadine Muhammad](https://github.com/Nadine-Muhammad)
+- [Rafik Sameh](https://github.com/RafikSameh)
 
 ---
 
-**Built with ❤️ by the Andalusia Data Science Team**
+**Built by Andalusia AI Team**
+
 ![check](https://github.com/Andalusia-Data-Science-Team/Resubmission-Copilot/actions/workflows/test.yml/badge.svg)
 ![check](https://github.com/Andalusia-Data-Science-Team/Resubmission-Copilot/actions/workflows/docs.yml/badge.svg)

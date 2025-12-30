@@ -16,12 +16,10 @@ An intelligent AI-powered system for automating medical insurance claims resubmi
 - [Configuration](#-configuration)
 - [Usage](#-usage)
 - [Project Structure](#-project-structure)
-- [API Reference](#-api-reference)
-- [Database Schema](#-database-schema)
 - [Development](#-development)
 - [Troubleshooting](#-troubleshooting)
-- [Enhancements](#-enhancements)
 - [Contributing](#-contributing)
+- [Authors](#-authors)
 
 ## 🎯 Overview
 

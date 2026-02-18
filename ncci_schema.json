@@ -1,0 +1,311 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "provider_name": {
+      "description": "Name of the healthcare provider or hospital.",
+      "type": "string"
+    },
+    "policy_number": {
+      "description": "Unique identifier for the policy.",
+      "type": "string"
+    },
+    "policy_status": {
+      "description": "Current status of the policy (e.g., VALID).",
+      "type": "string"
+    },
+    "policy_holder_name": {
+      "description": "Name of the policy holder.",
+      "type": "string"
+    },
+    "policy_type": {
+      "description": "Type of the policy (e.g., CORPORATE).",
+      "type": "string"
+    },
+    "issue_date": {
+      "description": "Date when the policy was issued, in YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "start_date": {
+      "description": "Effective start date of the policy coverage, in YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "end_date": {
+      "description": "Effective end date of the policy coverage, in YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "last_update": {
+      "description": "Date of the last update to the policy, in YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "coverage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Any specific notes or details regarding general coverage for this class."
+    },
+    "exclusion": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Any specific notes or details regarding exclusions for this class."
+    },
+    "comments": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Any general comments related to this class."
+    },
+    "classes": {
+      "description": "List of different policy classes, each with specific coverage details.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "class_code": {
+            "description": "Code identifying the specific class (e.g., '1-VIP-Network Gold').",
+            "type": "string"
+          },
+          "class_limit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "General limit associated with the class, if specified. Can be empty."
+          },
+          "room_type": {
+            "description": "Type of room covered under this class (e.g., 'Normal Suite', 'Private Room').",
+            "type": "string"
+          },
+          "room_limit": {
+            "description": "Monetary limit for room coverage under this class (e.g., '4000 SAR').",
+            "type": "string"
+          },
+          "benefits": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "benefit_code": {
+                      "description": "Code for the main benefit category (e.g., 'MATERNITY', 'DENTAL', 'OPTICAL', 'GENERAL').",
+                      "type": "string"
+                    },
+                    "description": {
+                      "description": "Description of the main benefit.",
+                      "type": "string"
+                    },
+                    "limit": {
+                      "description": "Overall monetary limit for this benefit (e.g., '1000000 SAR').",
+                      "type": "string"
+                    },
+                    "cases": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "case_name": {
+                                "description": "Name of the specific case (e.g., 'INPATIENT', 'OUTPATIENT', 'Generics and Irreplacable Brands').",
+                                "type": "string"
+                              },
+                              "patient_share": {
+                                "description": "Percentage or amount of cost shared by the patient for this case.",
+                                "type": "string"
+                              },
+                              "max_patient_share": {
+                                "description": "Maximum monetary amount of cost shared by the patient for this case (e.g., '0 SAR').",
+                                "type": "string"
+                              },
+                              "max_consultation_fee": {
+                                "description": "Maximum fee for consultation for this case (e.g., '0 SAR').",
+                                "type": "string"
+                              },
+                              "approval_threshold": {
+                                "description": "Monetary threshold requiring approval for this case (e.g., '10000 SAR').",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "case_name",
+                              "patient_share",
+                              "max_patient_share",
+                              "max_consultation_fee",
+                              "approval_threshold"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sub_coverages": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "sub_coverage_code": {
+                                "description": "Code for the specific sub-coverage (e.g., '175', '193').",
+                                "type": "string"
+                              },
+                              "description": {
+                                "description": "Description of the sub-coverage.",
+                                "type": "string"
+                              },
+                              "limit": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ],
+                                "description": "Monetary limit for this sub-coverage, if specified. Can be empty."
+                              },
+                              "approval_threshold": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ],
+                                "description": "Monetary threshold requiring approval for this sub-coverage, if specified. Can be empty."
+                              }
+                            },
+                            "required": [
+                              "sub_coverage_code",
+                              "description",
+                              "limit",
+                              "approval_threshold"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "benefit_code",
+                    "description",
+                    "limit",
+                    "cases",
+                    "sub_coverages"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "class_code",
+          "class_limit",
+          "room_type",
+          "room_limit",
+          "benefits"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "endorsements": {
+      "anyOf": [
+        {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "number": {
+                "description": "Endorsement number.",
+                "type": "string"
+              },
+              "date": {
+                "description": "Date of the endorsement, in YYYY-MM-DD format.",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of endorsement.",
+                "type": "string"
+              },
+              "message": {
+                "description": "Message or description of the endorsement.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "number",
+              "date",
+              "type",
+              "message"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "additional_information": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Any additional general information not captured elsewhere."
+    }
+  },
+  "required": [
+    "provider_name",
+    "policy_number",
+    "policy_status",
+    "policy_holder_name",
+    "policy_type",
+    "issue_date",
+    "start_date",
+    "end_date",
+    "last_update",
+    "coverage",
+    "exclusion",
+    "comments",
+    "classes",
+    "endorsements",
+    "additional_information"
+  ],
+  "type": "object"
+}

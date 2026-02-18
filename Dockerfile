@@ -27,6 +27,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY . .
 
-EXPOSE 5000
+EXPOSE 2200
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "flask_app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:2200", "flask_app:app"]

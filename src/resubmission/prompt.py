@@ -65,6 +65,97 @@ You should return a json structured like the following example:
 }
 You must detect all policy types in the document and return a key and values for each of them.
 """
+
+ncci_prompt = """You are an expert medical insurance document analyst.
+You are given a medical insurance policy PDF.
+Your task is to extract all relevant information and return it as a clean, well-structured JSON object.
+General rules:
+- Focus ONLY on English content. Ignore all Arabic text completely.
+- Do NOT hallucinate or infer missing data.
+- If a field is not found, return null.
+- Keep numbers as numbers (not strings) where possible.
+- Currency should be "SAR" when mentioned.
+- Preserve the original structure and meaning of the document.
+- The same JSON schema must work for multiple PDFs with the same design.
+
+Extraction goals:
+1. Extract general policy information.
+2. Extract policy holder and provider details.
+3. Extract all policy classes (e.g., VIP, VVIP).
+4. For each class:
+   - Room details
+   - Benefits
+   - Sub-coverages
+   - Limits, patient shares, approval thresholds
+5. Distinguish between Limit and Approval Threshold in Sub Coverage
+
+Output rules:
+- Return ONLY valid JSON
+- No explanations, no markdown
+- No extra text before or after the JSON
+You should return a json structured like the following example:
+{
+  "policy_number": "842",
+  "policy_status": "VALID",
+  "policy_type": "CORPORATE",
+  "policy_holder_name": "SAUDI WATER AUTHORITY",
+  "provider_name": "Hai Al Jamea Hospital",
+
+  "dates": {
+    "issue_date": "2024-12-23",
+    "start_date": "2024-12-31",
+    "end_date": "2025-12-30",
+    "last_update": "2024-12-31"
+  },
+
+  "classes": [
+    {
+      "class_code": "1-VIP-Network Gold",
+      "room": {
+        "type": "Private Room",
+        "limit": 2000,
+        "currency": "SAR"
+      },
+
+      "benefits": [
+        {
+          "benefit_code": "MATERNITY",
+          "description": "Pregnancy, Delivery and Miscarriage",
+          "limit": 500000,
+          "currency": "SAR",
+
+          "coverage": {
+            "inpatient": {
+              "patient_share_percent": 0,
+              "approval_threshold": 10000
+            },
+            "outpatient": {
+              "patient_share_percent": 20,
+              "max_patient_share": 100,
+              "approval_threshold": 10000
+            }
+          },
+
+          "sub_coverages": [
+            {
+              "code": 175,
+              "description": "Miscarriage / Legal Abortion / Caesarian",
+              "limit": 15000,
+              "approval_threshold": 10000
+            },
+            {
+              "code": 178,
+              "description": "Normal Delivery",
+              "limit": 15000,
+              "approval_threshold": 10000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+"""
 chatbot_prompt = """
 You are an expert medical insurance assistant. You are provided with a patient's insurance policy details, their coverage limits, services
 that require pre approval, other special instructions, etc.. Your task is to help the insurance team members find the information they need using the

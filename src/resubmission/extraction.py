@@ -32,8 +32,8 @@ class ExtractAgent:
             with open(schema, "r") as file:
                 schema = json.load(file)
             config = ExtractConfig(
-                system_prompt=prompt,
-            )
+                system_prompt=prompt
+                )
             print("Creating new agent.")
             self.agent = extractor.create_agent(
                 name=name, data_schema=schema, config=config

@@ -11,7 +11,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-from src.resubmission.models import CoverageDetail, Policy
+from src.resubmission.models import CoverageDetail, Policy,NCCI_Policy,CaseCoverage,SubCoverage,Benefit,PolicyClass,Endorsement
 
 sf = pd.read_csv(Path("Data") / "sfda_list.csv")
 
@@ -275,6 +275,106 @@ def insert(data_source):
     policy.save()
     print(f"Policy {policy.policy_number} inserted successfully.")
 
+def insert_ncci(data_source):
+    """
+    Insert an NCCI_Policy document from either a JSON file path or a Python dict.
+    Validates and doesn't insert if a policy with the same policy_number already exists.
+    """
+
+    # --- Load data ---
+    if isinstance(data_source, str):
+        with open(data_source, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    elif isinstance(data_source, dict):
+        data = data_source
+
+    else:
+        raise TypeError("data_source must be a dict or JSON file path")
+
+    # --- Validate policy_number ---
+    policy_number = data.get("policy_number")
+    if not policy_number:
+        raise ValueError("Missing required field: 'policy_number'")
+
+    # --- Check for existing policy ---
+    existing = NCCI_Policy.objects(policy_number=policy_number).first()
+    if existing:
+        print(f"Policy {policy_number} already exists. Skipping insert.")
+        return existing
+
+    # --- Parse classes ---
+    class_list = []
+    for cls in data.get("classes", []):
+
+        benefit_list = []
+        for benefit in cls.get("benefits") or []:
+
+            cases = [
+                CaseCoverage(**case)
+                for case in (benefit.get("cases") or [])
+            ]
+
+            sub_coverages = [
+                SubCoverage(**sub)
+                for sub in (benefit.get("sub_coverages") or [])
+            ]
+
+            benefit_list.append(
+                Benefit(
+                    benefit_code=benefit.get("benefit_code"),
+                    description=benefit.get("description"),
+                    limit=benefit.get("limit"),
+                    cases=cases or None,
+                    sub_coverages=sub_coverages or None,
+                )
+            )
+
+        class_list.append(
+            PolicyClass(
+                class_code=cls.get("class_code"),
+                class_limit=cls.get("class_limit"),
+                room_type=cls.get("room_type"),
+                room_limit=cls.get("room_limit"),
+                benefits=benefit_list or None,
+            )
+        )
+
+    if not class_list:
+        raise ValueError("At least one class is required")
+
+    # --- Parse endorsements ---
+    endorsement_list = [
+        Endorsement(**endorsement)
+        for endorsement in (data.get("endorsements") or [])
+    ]
+
+    # --- Create policy document ---
+    policy = NCCI_Policy(
+        provider_name=data.get("provider_name"),
+        policy_number=policy_number,
+        policy_status=data.get("policy_status"),
+        policy_holder_name=data.get("policy_holder_name"),
+        policy_type=data.get("policy_type"),
+
+        issue_date=datetime.fromisoformat(data["issue_date"]) if data.get("issue_date") else None,
+        start_date=datetime.fromisoformat(data["start_date"]) if data.get("start_date") else None,
+        end_date=datetime.fromisoformat(data["end_date"]) if data.get("end_date") else None,
+        last_update=datetime.fromisoformat(data["last_update"]) if data.get("last_update") else None,
+
+        coverage=data.get("coverage"),
+        exclusion=data.get("exclusion"),
+        comments=data.get("comments"),
+
+        classes=class_list,
+        endorsements=endorsement_list or None,
+        additional_information=data.get("additional_information"),
+    )
+
+    policy.save()
+    print(f"Policy {policy.policy_number} inserted successfully.")
+
+    return policy
 
 def delete(policy_number: str):
     """

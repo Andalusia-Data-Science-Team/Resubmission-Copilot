@@ -1,0 +1,1738 @@
+{
+  "provider_name": "Hai Al Jamea Hospital",
+  "policy_number": "41485987",
+  "policy_status": "VALID",
+  "policy_holder_name": "NATIONAL GRAIN SUPPLY COMPANY",
+  "policy_type": "CORPORATE",
+  "issue_date": "2025-02-05",
+  "start_date": "2025-02-04",
+  "end_date": "2026-02-03",
+  "last_update": "2025-02-04",
+  "coverage": null,
+  "exclusion": null,
+  "comments": "within the KSA only, except for Al-Habib Hospitals will be only for VIP and VVIP classes. 14 years for all Classes. • The providers for A and AP classes will match the GOLD network included. • Optical benefit is covered for all members with no age limit even if their age is above Maternity Limit of Class (VIP) should be SR.25,000. ? An X-Gratia Fund of SR.100,000 should be (A) (C). • Nil Deductible for Class (VIP). • Deductible 20% up to max SR.100 for Classes (A) (C). Coinsurance of Branded Medication with Alternative should be 20% up to Max SR.100 for Class Approval limit of SR.1,000 for Class {C). • Nil Deductible for all medication types for Class (VIP). Habib hospitals from Class (A) Network Providers. • No Approval required for Classes {VIP) (A). Deviation by 30% overall number of Members of 4,293 on inception members list. • Exclude Al- Insurance Company Delegate for 6 months starting after Firm order issuance date • Class VIP A Parents should be Annual limit of SR.500K.",
+  "classes": [
+    {
+      "class_code": "1-VIP-Network Gold",
+      "class_limit": null,
+      "room_type": "Normal Suite",
+      "room_limit": "1500 SAR",
+      "benefits": [
+        {
+          "benefit_code": "MATERNITY",
+          "description": "Pregnancy/Delivery and Miscarriage Benefit",
+          "limit": "25000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": null
+        },
+        {
+          "benefit_code": "DENTAL",
+          "description": "Dental Benefit",
+          "limit": "5000 SAR",
+          "cases": [
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "193",
+              "description": "Gum Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "194",
+              "description": "Teeth Extraction",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "197",
+              "description": "Root Canal Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "200",
+              "description": "Amalgam Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "201",
+              "description": "Composite (non-cosmetic) Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "216",
+              "description": "Dental Cleaning (Once PPPY)",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "471",
+              "description": "Corrective dental without deductible",
+              "limit": "3000",
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "472",
+              "description": "Treatment of root canals and emergencies",
+              "limit": "2000",
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "OPTICAL",
+          "description": "Visual Aid Benefit (w/ Frames) ..",
+          "limit": "1500 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "207",
+              "description": "Optical Examination",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "208",
+              "description": "Medical Lens",
+              "limit": null,
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "GENERAL",
+          "description": "Basic Medical Benefit",
+          "limit": "1000000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "3",
+              "description": "Home Visits Per Day",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "4",
+              "description": "Medical Advisor Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "5",
+              "description": "Prior Arrangement Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "6",
+              "description": "Special Hotline Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "19",
+              "description": "VIP Services",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "51",
+              "description": "Appointed Pharmacy for Chronic Medications Supply",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "59",
+              "description": "Toll Free Centre",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "128",
+              "description": "New Born",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "129",
+              "description": "Life Threatening Congenital Disease/Deformities",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "131",
+              "description": "Organ Transplant for Heart and Liver (covered in KSA only)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "132",
+              "description": "Vaccination of Children as per MOH Specification",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "134",
+              "description": "Circumcision for New Born Male",
+              "limit": "500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "136",
+              "description": "Hearing Aids",
+              "limit": "6000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "137",
+              "description": "Repatriation of Mortal Remains to Home Country",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "138",
+              "description": "Companion Expenses for Children less than 12 yrs. Old",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "139",
+              "description": "Intensive Care Unit (ICU)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "153",
+              "description": "Hearing Test",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "160",
+              "description": "Physiotherapy Treatment",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "170",
+              "description": "Local Road Ambulance",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "221",
+              "description": "Ear Piercing For Female New Born Babies",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "233",
+              "description": "Pre-mature Born Babies",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "298",
+              "description": "Kidney Dialysis",
+              "limit": "180000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "304",
+              "description": "Cost of Acquired valvular heart disease",
+              "limit": "150000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "305",
+              "description": "Expenses of Organs Donation Operation for the donor",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "306",
+              "description": "Expenses of Zahimer disease",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "307",
+              "description": "Expenses of Autism",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "308",
+              "description": "New born babies national Preventive Program",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "309",
+              "description": "Cost of Disability cases",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "322",
+              "description": "Presence of implants and grafts",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "386",
+              "description": "Psychiatric Treatment for Acute Cases of Psychological Disorders",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "388",
+              "description": "Expenses of Complication of Cardiac Valve replacement",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "428",
+              "description": "screening for hearing Impairment and critical congenital heart malformation in newborns.",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "429",
+              "description": "Costs of infant formula (baby milk powder) in need of medical care up to the age of 24 months to become free of charge.",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "431",
+              "description": "Respiratory Syncytial Virus (RSV) immunization program for children according to the Ministry of Health approved immunodeficiency virus vaccines schedule.",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "432",
+              "description": "Psoriasis treatment",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "433",
+              "description": "Delivery complications are covered up to the maximum benefit limit of this policy.",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "434",
+              "description": "Cost of newborns coverage on the mother's policy up to a maximum of 30 days from the date of birth until they are added in the policy on retroactive basis from the date of birth",
+              "limit": "1000000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "468",
+              "description": "Early and exploratory examination",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "469",
+              "description": "Costs for contraception",
+              "limit": "1500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "470",
+              "description": "Cost of mental diseases",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "474",
+              "description": "Kidney Transplant Costs",
+              "limit": "250000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "480",
+              "description": "Adult Vaccination based on National Vaccination Schedule for Adults",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "481",
+              "description": "Sexually transmeted diseases Include cover for Nongonococcal urethritis, Trichomoniasis, HIV, Syphilis, Human Papillomavirus (genetic warts), Neisseria gonorrhoeae, Genetic herpes, Chancroid",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "482",
+              "description": "Costs for menopausal and Perimenopause",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "484",
+              "description": "The costs of complications resulting from a benefit treatment covered in the policy",
+              "limit": null,
+              "approval_threshold": "10000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_code": "2-A-Network One plus",
+      "class_limit": "Private Room",
+      "room_type": "Private Room",
+      "room_limit": "0 SAR",
+      "benefits": [
+        {
+          "benefit_code": "MATERNITY",
+          "description": "Pregnancy/Delivery and Miscarriage Benefit",
+          "limit": "15000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "175",
+              "description": "Miscarriage/Legal Abortion, Caesarian and Complications of",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "178",
+              "description": "Normal Delivery",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            }
+          ]
+        },
+        {
+          "benefit_code": "DENTAL",
+          "description": "Dental Benefit",
+          "limit": "3000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "193",
+              "description": "Gum Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "194",
+              "description": "Teeth Extraction",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "197",
+              "description": "Root Canal Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "200",
+              "description": "Amalgam Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "201",
+              "description": "Composite (non-cosmetic) Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "216",
+              "description": "Dental Cleaning (Once PPPY)",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "471",
+              "description": "Corrective dental without deductible",
+              "limit": "1800",
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "472",
+              "description": "Treatment of root canals and emergencies",
+              "limit": "1200",
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "OPTICAL",
+          "description": "Visual Aid Benefit (w/ Frames) ..",
+          "limit": "1000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Brands",
+              "patient_share": "",
+              "max_patient_share": "",
+              "max_consultation_fee": "",
+              "approval_threshold": ""
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "207",
+              "description": "Optical Examination",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "208",
+              "description": "Medical Lens",
+              "limit": null,
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "GENERAL",
+          "description": "Basic Medical Benefit",
+          "limit": "1000000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "6",
+              "description": "Special Hotline Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "59",
+              "description": "Toll Free Centre",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "128",
+              "description": "New Born",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "129",
+              "description": "Life Threatening Congenital Disease/Deformities",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "131",
+              "description": "Organ Transplant for Heart and Liver (covered in KSA only)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "132",
+              "description": "Vaccination of Children as per MOH Specification",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "134",
+              "description": "Circumcision for New Born Male",
+              "limit": "500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "136",
+              "description": "Hearing Aids",
+              "limit": "6000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "137",
+              "description": "Repatriation of Mortal Remains to Home Country",
+              "limit": "10000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "138",
+              "description": "Companion Expenses for Children less than 12 yrs. Old",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "139",
+              "description": "Intensive Care Unit (ICU)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "153",
+              "description": "Hearing Test",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "160",
+              "description": "Physiotherapy Treatment",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "170",
+              "description": "Local Road Ambulance",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "221",
+              "description": "Ear Piercing For Female New Born Babies",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "233",
+              "description": "Pre-mature Born Babies",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "298",
+              "description": "Kidney Dialysis",
+              "limit": "180000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "304",
+              "description": "Cost of Acquired valvular heart disease",
+              "limit": "150000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "305",
+              "description": "Expenses of Organs Donation Operation for the donor",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "306",
+              "description": "Expenses of Zahimer disease",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "307",
+              "description": "Expenses of Autism",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "308",
+              "description": "New born babies national Preventive Program",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "309",
+              "description": "Cost of Disability cases",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "322",
+              "description": "Presence of implants and grafts",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "386",
+              "description": "Psychiatric Treatment for Acute Cases of Psychological Disorders",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "388",
+              "description": "Expenses of Complication of Cardiac Valve replacement",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "468",
+              "description": "Early and exploratory examination",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "469",
+              "description": "Costs for contraception",
+              "limit": "1500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "470",
+              "description": "Cost of mental diseases",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "474",
+              "description": "Kidney Transplant Costs",
+              "limit": "250000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "480",
+              "description": "Adult Vaccination based on National Vaccination Schedule for Adults",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "481",
+              "description": "Sexually transmeted diseases Include cover for Nongonococcal urethritis, Trichomoniasis, HIV, Syphilis, Human Papillomavirus (genetic warts), Neisseria gonorrhoeae, Genetic herpes, Chancroid",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "482",
+              "description": "Costs for menopausal and Perimenopause",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "484",
+              "description": "The costs of complications resulting from a benefit treatment covered in the policy",
+              "limit": null,
+              "approval_threshold": "10000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_code": "4-VIPP-Network Gold",
+      "class_limit": "Normal Suite",
+      "room_type": "Normal Suite",
+      "room_limit": "1500 SAR",
+      "benefits": [
+        {
+          "benefit_code": "DENTAL",
+          "description": "Dental Benefit",
+          "limit": "5000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "193",
+              "description": "Gum Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "194",
+              "description": "Teeth Extraction",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "197",
+              "description": "Root Canal Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "200",
+              "description": "Amalgam Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "201",
+              "description": "Composite (non-cosmetic) Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "216",
+              "description": "Dental Cleaning (Once PPPY)",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "471",
+              "description": "Corrective dental without deductible",
+              "limit": "3000",
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "472",
+              "description": "Treatment of root canals and emergencies",
+              "limit": "2000",
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "OPTICAL",
+          "description": "Visual Aid Benefit (w/ Frames) ..",
+          "limit": "1500 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "207",
+              "description": "Optical Examination",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "208",
+              "description": "Medical Lens",
+              "limit": null,
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "GENERAL",
+          "description": "Basic Medical Benefit",
+          "limit": "500000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "3",
+              "description": "Home Visits Per Day",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "4",
+              "description": "Medical Advisor Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "5",
+              "description": "Prior Arrangement Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "6",
+              "description": "Special Hotline Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "19",
+              "description": "VIP Services",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "51",
+              "description": "Appointed Pharmacy for Chronic Medications Supply",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "59",
+              "description": "Toll Free Centre",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "128",
+              "description": "New Born",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "129",
+              "description": "Life Threatening Congenital Disease/Deformities",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "131",
+              "description": "Organ Transplant for Heart and Liver (covered in KSA only)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "132",
+              "description": "Vaccination of Children as per MOH Specification",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "134",
+              "description": "Circumcision for New Born Male",
+              "limit": "500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "136",
+              "description": "Hearing Aids",
+              "limit": "6000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "137",
+              "description": "Repatriation of Mortal Remains to Home Country",
+              "limit": "10000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "138",
+              "description": "Companion Expenses for Children less than 12 yrs. Old",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "139",
+              "description": "Intensive Care Unit (ICU)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "153",
+              "description": "Hearing Test",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "160",
+              "description": "Physiotherapy Treatment",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "170",
+              "description": "Local Road Ambulance",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "221",
+              "description": "Ear Piercing For Female New Born Babies",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "233",
+              "description": "Pre-mature Born Babies",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "298",
+              "description": "Kidney Dialysis",
+              "limit": "180000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "304",
+              "description": "Cost of Acquired valvular heart disease",
+              "limit": "150000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "305",
+              "description": "Expenses of Organs Donation Operation for the donor",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "306",
+              "description": "Expenses of Zahimer disease",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "307",
+              "description": "Expenses of Autism",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "308",
+              "description": "New born babies national Preventive Program",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "309",
+              "description": "Cost of Disability cases",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "322",
+              "description": "Presence of implants and grafts",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "386",
+              "description": "Psychiatric Treatment for Acute Cases of Psychological Disorders",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "388",
+              "description": "Expenses of Complication of Cardiac Valve replacement",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "468",
+              "description": "Early and exploratory examination",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "469",
+              "description": "Costs for contraception",
+              "limit": "1500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "470",
+              "description": "Cost of mental diseases",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "474",
+              "description": "Kidney Transplant Costs",
+              "limit": "250000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "480",
+              "description": "Adult Vaccination based on National Vaccination Schedule for Adults",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "481",
+              "description": "Sexually transmeted diseases Include cover for Nongonococcal urethritis, Trichomoniasis, HIV, Syphilis, Human Papillomavirus (genetic warts), Neisseria gonorrhoeae, Genetic herpes, Chancroid",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "482",
+              "description": "Costs for menopausal and Perimenopause",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "484",
+              "description": "The costs of complications resulting from a benefit treatment covered in the policy",
+              "limit": null,
+              "approval_threshold": "10000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_code": "5-AP-Network One plus",
+      "class_limit": "Private Room",
+      "room_type": "Private Room",
+      "room_limit": "0 SAR",
+      "benefits": [
+        {
+          "benefit_code": "DENTAL",
+          "description": "Dental Benefit",
+          "limit": "3000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "193",
+              "description": "Gum Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "194",
+              "description": "Teeth Extraction",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "197",
+              "description": "Root Canal Treatment",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "200",
+              "description": "Amalgam Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "201",
+              "description": "Composite (non-cosmetic) Filling",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "216",
+              "description": "Dental Cleaning (Once PPPY)",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "471",
+              "description": "Corrective dental without deductible",
+              "limit": "1800",
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "472",
+              "description": "Treatment of root canals and emergencies",
+              "limit": "1200",
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "OPTICAL",
+          "description": "Visual Aid Benefit (w/ Frames) ..",
+          "limit": "1000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "1 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "207",
+              "description": "Optical Examination",
+              "limit": null,
+              "approval_threshold": "1"
+            },
+            {
+              "sub_coverage_code": "208",
+              "description": "Medical Lens",
+              "limit": null,
+              "approval_threshold": "1"
+            }
+          ]
+        },
+        {
+          "benefit_code": "GENERAL",
+          "description": "Basic Medical Benefit",
+          "limit": "500000 SAR",
+          "cases": [
+            {
+              "case_name": "INPATIENT",
+              "patient_share": "0",
+              "max_patient_share": "0 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "OUTPATIENT",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "10000 SAR"
+            },
+            {
+              "case_name": "Generics and Irreplacable Brands",
+              "patient_share": "20",
+              "max_patient_share": "30 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            },
+            {
+              "case_name": "Replaceable Brand",
+              "patient_share": "20",
+              "max_patient_share": "100 SAR",
+              "max_consultation_fee": "0 SAR",
+              "approval_threshold": "0 SAR"
+            }
+          ],
+          "sub_coverages": [
+            {
+              "sub_coverage_code": "6",
+              "description": "Special Hotline Service",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "59",
+              "description": "Toll Free Centre",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "128",
+              "description": "New Born",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "129",
+              "description": "Life Threatening Congenital Disease/Deformities",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "131",
+              "description": "Organ Transplant for Heart and Liver (covered in KSA only)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "132",
+              "description": "Vaccination of Children as per MOH Specification",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "134",
+              "description": "Circumcision for New Born Male",
+              "limit": "500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "136",
+              "description": "Hearing Aids",
+              "limit": "6000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "137",
+              "description": "Repatriation of Mortal Remains to Home Country",
+              "limit": "10000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "138",
+              "description": "Companion Expenses for Children less than 12 yrs. Old",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "139",
+              "description": "Intensive Care Unit (ICU)",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "153",
+              "description": "Hearing Test",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "160",
+              "description": "Physiotherapy Treatment",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "170",
+              "description": "Local Road Ambulance",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "221",
+              "description": "Ear Piercing For Female New Born Babies",
+              "limit": "300",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "233",
+              "description": "Pre-mature Born Babies",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "298",
+              "description": "Kidney Dialysis",
+              "limit": "180000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "304",
+              "description": "Cost of Acquired valvular heart disease",
+              "limit": "150000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "305",
+              "description": "Expenses of Organs Donation Operation for the donor",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "306",
+              "description": "Expenses of Zahimer disease",
+              "limit": "15000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "307",
+              "description": "Expenses of Autism",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "308",
+              "description": "New born babies national Preventive Program",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "309",
+              "description": "Cost of Disability cases",
+              "limit": "100000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "322",
+              "description": "Presence of implants and grafts",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "386",
+              "description": "Psychiatric Treatment for Acute Cases of Psychological Disorders",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "388",
+              "description": "Expenses of Complication of Cardiac Valve replacement",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "468",
+              "description": "Early and exploratory examination",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "469",
+              "description": "Costs for contraception",
+              "limit": "1500",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "470",
+              "description": "Cost of mental diseases",
+              "limit": "50000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "474",
+              "description": "Kidney Transplant Costs",
+              "limit": "250000",
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "480",
+              "description": "Adult Vaccination based on National Vaccination Schedule for Adults",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "481",
+              "description": "Sexually transmeted diseases Include cover for Nongonococcal urethritis, Trichomoniasis, HIV, Syphilis, Human Papillomavirus (genetic warts), Neisseria gonorrhoeae, Genetic herpes, Chancroid",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "482",
+              "description": "Costs for menopausal and Perimenopause",
+              "limit": null,
+              "approval_threshold": "10000"
+            },
+            {
+              "sub_coverage_code": "484",
+              "description": "The costs of complications resulting from a benefit treatment covered in the policy",
+              "limit": null,
+              "approval_threshold": "10000"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "endorsements": null,
+  "additional_information": null
+}

@@ -11,7 +11,6 @@ env/
 
 # Local development files
 *.log
-*.env
 *.ini
 *.cfg
 *.toml
@@ -34,13 +33,5 @@ Policy/
 scripts/
 
 # Data or samples not needed in prod
-Data/*.xlsx
+#Data/*.xlsx
 *.ipynb
-
-# Docker artifacts
-Dockerfile
-docker-compose.yml
-
-passcode.json
-schema.json
-database.ini

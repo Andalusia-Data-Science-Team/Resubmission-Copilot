@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: resubmission_flask
+    container_name: policy_assistant
     ports:
       - "2200:2200"
     environment:
@@ -11,4 +11,5 @@ services:
       - FLASK_APP=flask_app.py
     volumes:
       - .:/app
-    command: flask run --host=0.0.0.0 --port=2200
+    #command: flask run --host=0.0.0.0 --port=2200
+    command: ["python3", "flask_app.py"]

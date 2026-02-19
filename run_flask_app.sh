@@ -6,4 +6,4 @@ source /home/ai/Workspace/Nadine/Resubmission-Copilot/env/bin/activate
 cd /home/ai/Workspace/Nadine/Resubmission-Copilot
 
 # --- Run the Flask app ---
-python flask_app.py
+python3 flask_app.py

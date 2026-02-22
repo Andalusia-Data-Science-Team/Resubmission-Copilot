@@ -51,24 +51,27 @@
     
     .logo-container {
       position: absolute;
-      left: 0;
+      left: -100px;
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       transition: transform 0.3s ease;
       flex-shrink: 0;
     }
-    
+
     .logo-container:hover {
-      transform: scale(1.05);
+      transform: translateY(-50%) scale(1.05);
     }
-    
+
     .logo-container img {
-      width: 45px;
-      height: 45px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
+      filter: brightness(0) invert(1); /* makes logo white so it's visible on brown */
     }
     
     /* If no image is provided, show icon */
@@ -205,9 +208,19 @@
   <header class="text-white py-4 mb-4">
     <div class="container">
       <div class="header-content">
+        
+        <!-- Logo -->
+        <div class="logo-container">
+          <img src="{{ url_for('static', filename='images/ag-logo-en.42bbc5d.png') }}" 
+              alt="Logo" 
+              class="title-logo">
+        </div>
+
+        <!-- Title -->
         <h2>
-          Smart Search - AI Policy Finder
+          Insurance Policy Uploader
         </h2>
+
       </div>
     </div>
   </header>

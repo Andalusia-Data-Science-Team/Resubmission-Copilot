@@ -146,13 +146,38 @@ def display_policy_details(visit_id):
         end_date=end_date,
     )
 
-@app.route("/select_level/<visit_id>", methods=["POST"])
+""" @app.route("/select_level/<visit_id>", methods=["POST"])
 def select_level(visit_id):
     # store selected level temporarily
     session["tmp_level"] = request.form.get("selected_level")
     
     # redirect back to display_policy_details
-    return redirect(url_for("display_policy_details", visit_id=visit_id))
+    return redirect(url_for("display_policy_details", visit_id=visit_id)) """
+@app.route("/select_level/<visit_id>", methods=["POST"])
+def select_level(visit_id):
+    selected_level = request.form.get("selected_level")
+
+    df = get_visit_data(visit_id, logger)
+    df["Contract"] = selected_level
+
+    policy, detail, available_levels = get_policy_details(df, logger)
+
+    if detail is None:
+        return render_template(
+            ERROR,
+            message="Still no information found for selected class.",
+            available_levels=available_levels,
+            visit_id=visit_id,
+        )
+
+    # CACHE DATA HERE
+    session[f"visit_data_{visit_id}"] = {
+        "df": df.to_json(),
+        "policy_number": policy.policy_number,
+        "detail": json.dumps(detail, default=str),
+    }
+
+    return redirect(url_for("chat", visit_id=visit_id))
 
 @app.route("/chat/<visit_id>", methods=["GET", "POST"])
 def chat(visit_id):

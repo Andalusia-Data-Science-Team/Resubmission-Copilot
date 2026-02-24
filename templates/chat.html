@@ -5,6 +5,8 @@
 {% endblock %}
 {% block content %}
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <!-- Visit Information Card -->
 {% if df %}
 <div class="card shadow-sm mb-4">
@@ -303,7 +305,7 @@ document.querySelectorAll('.justify-btn').forEach(btn => {
       // Add justification as assistant message
       const assistantMsgContainer = document.createElement('div');
       assistantMsgContainer.className = 'message-container-assistant';
-      assistantMsgContainer.innerHTML = `<div class="message-assistant">${escapeHtml(data.justification)}</div>`;
+      assistantMsgContainer.innerHTML = `<div class="message-assistant">${marked.parse(data.justification)}</div>`;
       box.appendChild(assistantMsgContainer);
       box.scrollTop = box.scrollHeight;
       
@@ -372,7 +374,7 @@ form.addEventListener('submit', async e => {
     // Add assistant response
     const assistantMsgContainer = document.createElement('div');
     assistantMsgContainer.className = 'message-container-assistant';
-    assistantMsgContainer.innerHTML = `<div class="message-assistant">${escapeHtml(data.response)}</div>`;
+    assistantMsgContainer.innerHTML = `<div class="message-assistant">${marked.parse(data.response)}</div>`;
     box.appendChild(assistantMsgContainer);
     
   } catch (error) {
